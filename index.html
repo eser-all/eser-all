@@ -53,7 +53,7 @@
     }
     .section-title {
       font-size: 22px;
-      margin: 30px 0 20px;
+      margin: 25px 0 15px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -66,6 +66,31 @@
       max-width: 950px;
       margin: 0 auto;
     }
+
+    /* Small/Inline Grid for FTP and TV Servers */
+    .inline-grid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      max-width: 950px;
+      margin: 0 auto 20px auto;
+    }
+    .compact-card {
+      padding: 10px 14px;
+      min-height: auto;
+      flex: 1 1 120px;
+      max-width: 200px;
+    }
+    .compact-card i {
+      font-size: 28px !important;
+    }
+    .compact-card div {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
     .link-card {
       display: flex;
       flex-direction: column;
@@ -88,33 +113,33 @@
       transform: translateY(-3px);
       background: rgba(255, 255, 255, 0.18);
     }
-    .link-card i.fa-play-circle { color: #4CAF50; font-size: 60px; pointer-events: none; }
-    .link-card i.fa-folder-open { color: #FFC107; font-size: 60px; pointer-events: none; }
-    .link-card i.fa-film { color: #E91E63; font-size: 60px; pointer-events: none; }
-    .link-card i.fa-photo-video { color: #9C27B0; font-size: 60px; pointer-events: none; }
-    .link-card i.fa-tv { color: #FF9800; font-size: 60px; pointer-events: none; }
-    .link-card i.fa-desktop { color: #00BCD4; font-size: 60px; pointer-events: none; }
-    .link-card i.fa-landmark { color: #00E676; font-size: 60px; pointer-events: none; }
-    .link-card i.fa-graduation-cap { color: #FF5722; font-size: 60px; pointer-events: none; }
+    .link-card i.fa-play-circle { color: #4CAF50; font-size: 50px; pointer-events: none; }
+    .link-card i.fa-folder-open { color: #FFC107; font-size: 50px; pointer-events: none; }
+    .link-card i.fa-film { color: #E91E63; font-size: 50px; pointer-events: none; }
+    .link-card i.fa-photo-video { color: #9C27B0; font-size: 50px; pointer-events: none; }
+    .link-card i.fa-tv { color: #FF9800; font-size: 50px; pointer-events: none; }
+    .link-card i.fa-desktop { color: #00BCD4; font-size: 50px; pointer-events: none; }
+    .link-card i.fa-landmark { color: #00E676; font-size: 50px; pointer-events: none; }
+    .link-card i.fa-graduation-cap { color: #FF5722; font-size: 50px; pointer-events: none; }
     .link-card a {
       color: white;
       text-decoration: none;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       width: 100%;
       height: 100%;
     }
     .edit-btn {
       position: absolute;
-      top: 8px;
-      right: 10px;
+      top: 4px;
+      right: 6px;
       background: #fff;
       color: #000;
       border-radius: 50%;
-      padding: 2px 8px;
-      font-size: 12px;
+      padding: 2px 6px;
+      font-size: 10px;
       font-weight: bold;
       cursor: pointer;
       z-index: 10;
@@ -189,28 +214,20 @@
   <div class="dashboard">
     <div class="main-header">ESER-ALL Portal</div>
 
-    <div class="section-title"><i class="fas fa-play-circle"></i> FTP Server 1</div>
-    <div class="link-grid" id="ftp-section"></div>
+    <!-- FTP Servers Section (Combined into 1 row) -->
+    <div class="section-title"><i class="fas fa-server"></i> FTP Servers</div>
+    <div class="inline-grid" id="ftp-all-section"></div>
 
-    <div class="section-title"><i class="fas fa-folder-open"></i> FTP Server 2</div>
-    <div class="link-grid" id="ftp2-section"></div>
+    <!-- Live TV Section (Combined into 1 row) -->
+    <div class="section-title"><i class="fas fa-tv"></i> Live TV</div>
+    <div class="inline-grid" id="tv-all-section"></div>
 
-    <div class="section-title"><i class="fas fa-film"></i> FTP Server 3</div>
-    <div class="link-grid" id="ftp3-section"></div>
-
-    <div class="section-title"><i class="fas fa-photo-video"></i> FTP Server 4</div>
-    <div class="link-grid" id="ftp4-section"></div>
-    
-    <div class="section-title"><i class="fas fa-tv"></i> Live TV 1</div>
-    <div class="link-grid" id="tv-section"></div>
-
-    <div class="section-title"><i class="fas fa-desktop"></i> Live TV 2</div>
-    <div class="link-grid" id="tv2-section"></div>
-
+    <!-- Government Services -->
     <div class="section-title"><i class="fas fa-landmark"></i> Government Services (সরকারি সেবা)</div>
     <div class="link-grid" id="gov-section"></div>
 
-    <div class="section-title"><i class="fas fa-graduation-cap"></i> University Admissions (বিশ্ববিদ্যালয় ভর্তি)</div>
+    <!-- Education & Admissions -->
+    <div class="section-title"><i class="fas fa-graduation-cap"></i> University Admissions & Board Results (শিক্ষা ও ভর্তি সেবা)</div>
     <div class="link-grid" id="edu-section"></div>
     
     <div class="dashboard-controls" id="adminControls" style="display: none; margin-top: 20px;">
@@ -276,42 +293,40 @@
       { title: "জিএসটি/গুচ্ছ বিশ্ববিদ্যালয়", url: "http://gstadmission.ac.bd" },
       { title: "ঢাকা বিশ্ববিদ্যালয়", url: "http://duadmission.eis.du.ac.bd" },
       { title: "জাতীয় বিশ্ববিদ্যালয় ভর্তি", url: "http://app11.nu.edu.bd/" },
-      { title: "জাতীয় বিশ্ববিদ্যালয় রেজাল্ট", url: "http://results.nu.ac.bd/" }
+      { title: "জাতীয় বিশ্ববিদ্যালয় রেজাল্ট", url: "http://results.nu.ac.bd/" },
+      { title: "জেএসসি/জেডিসি/এসএসসি/দাখিল/এইচএসসি/আলিম ও সমমানের পরীক্ষা", url: "https://www.educationboardresults.gov.bd/v2/home" }
     ];
 
     let currentEdit = { type: '', index: -1 };
     let isAdmin = false, showEditIcons = false;
 
     function renderLinks() {
-      const ftpc = document.getElementById('ftp-section');
-      const ftp2c = document.getElementById('ftp2-section');
-      const ftp3c = document.getElementById('ftp3-section');
-      const ftp4c = document.getElementById('ftp4-section');
-      const tvc = document.getElementById('tv-section');
-      const tv2c = document.getElementById('tv2-section');
+      const ftpAllContainer = document.getElementById('ftp-all-section');
+      const tvAllContainer = document.getElementById('tv-all-section');
       const govc = document.getElementById('gov-section');
       const educ = document.getElementById('edu-section');
       
-      ftpc.innerHTML = ''; 
-      ftp2c.innerHTML = ''; 
-      ftp3c.innerHTML = ''; 
-      ftp4c.innerHTML = '';
-      tvc.innerHTML = '';
-      tv2c.innerHTML = '';
+      ftpAllContainer.innerHTML = '';
+      tvAllContainer.innerHTML = '';
       govc.innerHTML = '';
       educ.innerHTML = '';
       
-      ftpLinks.forEach((l, i) => { ftpc.innerHTML += genCard(l.title, l.url, 'ftp', i); });
-      ftp2Links.forEach((l, i) => { ftp2c.innerHTML += genCard(l.title, l.url, 'ftp2', i); });
-      ftp3Links.forEach((l, i) => { ftp3c.innerHTML += genCard(l.title, l.url, 'ftp3', i); });
-      ftp4Links.forEach((l, i) => { ftp4c.innerHTML += genCard(l.title, l.url, 'ftp4', i); });
-      tvLinks.forEach((l, i) => { tvc.innerHTML += genCard(l.title, l.url, 'tv', i); });
-      tv2Links.forEach((l, i) => { tv2c.innerHTML += genCard(l.title, l.url, 'tv2', i); });
-      govLinks.forEach((l, i) => { govc.innerHTML += genCard(l.title, l.url, 'gov', i); });
-      eduLinks.forEach((l, i) => { educ.innerHTML += genCard(l.title, l.url, 'edu', i); });
+      // Render FTP Servers in 1 row (compact style)
+      ftpLinks.forEach((l, i) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp', i, true); });
+      ftp2Links.forEach((l, i) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp2', i, true); });
+      ftp3Links.forEach((l, i) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp3', i, true); });
+      ftp4Links.forEach((l, i) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp4', i, true); });
+
+      // Render Live TV in 1 row (compact style)
+      tvLinks.forEach((l, i) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv', i, true); });
+      tv2Links.forEach((l, i) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv2', i, true); });
+
+      // Render Gov and Edu
+      govLinks.forEach((l, i) => { govc.innerHTML += genCard(l.title, l.url, 'gov', i, false); });
+      eduLinks.forEach((l, i) => { educ.innerHTML += genCard(l.title, l.url, 'edu', i, false); });
     }
 
-    function genCard(title, url, type, idx) {
+    function genCard(title, url, type, idx, isCompact = false) {
       let formattedUrl = url || '';
       if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
         formattedUrl = `http://${formattedUrl}`;
@@ -326,8 +341,10 @@
       if (type === 'gov') iconClass = 'fas fa-landmark';
       if (type === 'edu') iconClass = 'fas fa-graduation-cap';
 
+      const compactClass = isCompact ? 'compact-card' : '';
+
       return `
-        <div class="link-card" onclick="openTargetUrl(event, '${formattedUrl}')">
+        <div class="link-card ${compactClass}" onclick="openTargetUrl(event, '${formattedUrl}')">
           <a href="${formattedUrl}" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault();">
             <i class="${iconClass}"></i>
             <div>${title}</div>
