@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>FTP & Live TV Portal</title>
+  <title>ESER-ALL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -45,8 +45,14 @@
       padding: 30px 15px 10px;
       text-align: center;
     }
+    .main-header {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      letter-spacing: 1px;
+    }
     .section-title {
-      font-size: 24px;
+      font-size: 22px;
       margin: 30px 0 20px;
       display: flex;
       justify-content: center;
@@ -181,6 +187,8 @@
   <div id="particles-js"></div>
   
   <div class="dashboard">
+    <div class="main-header">ESER-ALL Portal</div>
+
     <div class="section-title"><i class="fas fa-play-circle"></i> FTP Server 1</div>
     <div class="link-grid" id="ftp-section"></div>
 
@@ -266,7 +274,9 @@
 
     let eduLinks = [
       { title: "জিএসটি/গুচ্ছ বিশ্ববিদ্যালয়", url: "http://gstadmission.ac.bd" },
-      { title: "ঢাকা বিশ্ববিদ্যালয়", url: "http://duadmission.eis.du.ac.bd" }
+      { title: "ঢাকা বিশ্ববিদ্যালয়", url: "http://duadmission.eis.du.ac.bd" },
+      { title: "জাতীয় বিশ্ববিদ্যালয় ভর্তি", url: "http://app11.nu.edu.bd/" },
+      { title: "জাতীয় বিশ্ববিদ্যালয় রেজাল্ট", url: "http://results.nu.ac.bd/" }
     ];
 
     let currentEdit = { type: '', index: -1 };
