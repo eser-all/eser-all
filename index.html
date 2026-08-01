@@ -119,6 +119,8 @@
     .link-card i.fa-photo-video { color: #9C27B0; font-size: 50px; pointer-events: none; }
     .link-card i.fa-tv { color: #FF9800; font-size: 50px; pointer-events: none; }
     .link-card i.fa-desktop { color: #00BCD4; font-size: 50px; pointer-events: none; }
+    .link-card i.fa-satellite-dish { color: #E040FB; font-size: 50px; pointer-events: none; }
+    .link-card i.fa-globe { color: #FF5252; font-size: 50px; pointer-events: none; }
     .link-card i.fa-landmark { color: #00E676; font-size: 50px; pointer-events: none; }
     .link-card i.fa-graduation-cap { color: #FF5722; font-size: 50px; pointer-events: none; }
     .link-card a {
@@ -278,8 +280,11 @@
     let ftp2Links = [{ title: "FTP Server 2", url: `http://${FTP2_API_HOST}/` }];
     let ftp3Links = [{ title: "FTP Server 3", url: `http://${FTP3_API_HOST}/` }];
     let ftp4Links = [{ title: "FTP Server 4", url: `http://${FTP4_API_HOST}/dashboard.php?session=c2c3e6c0aa01b1c155cec1fbab1bc6c47883390af1b4cb470ee461ff53665061` }];
+    
     let tvLinks = [{ title: "Live TV 1", url: `http://${TV_API_HOST}/` }];
     let tv2Links = [{ title: "Live TV 2", url: `http://${TV2_API_HOST}/` }];
+    let tv3Links = [{ title: "Live TV 3", url: "https://toffeelive.com/en/watch/qnv835oBcqxnFHJBuQcB" }];
+    let tv4Links = [{ title: "Live TV 4", url: "https://www.jagobd.com/" }];
 
     let govLinks = [
       { title: "NID / ভোটার আবেদন", url: "http://services.nidw.gov.bd" },
@@ -320,6 +325,8 @@
       // Render Live TV in 1 row (compact style)
       tvLinks.forEach((l, i) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv', i, true); });
       tv2Links.forEach((l, i) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv2', i, true); });
+      tv3Links.forEach((l, i) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv3', i, true); });
+      tv4Links.forEach((l, i) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv4', i, true); });
 
       // Render Gov and Edu
       govLinks.forEach((l, i) => { govc.innerHTML += genCard(l.title, l.url, 'gov', i, false); });
@@ -338,6 +345,8 @@
       if (type === 'ftp4') iconClass = 'fas fa-photo-video';
       if (type === 'tv') iconClass = 'fas fa-tv';
       if (type === 'tv2') iconClass = 'fas fa-desktop';
+      if (type === 'tv3') iconClass = 'fas fa-satellite-dish';
+      if (type === 'tv4') iconClass = 'fas fa-globe';
       if (type === 'gov') iconClass = 'fas fa-landmark';
       if (type === 'edu') iconClass = 'fas fa-graduation-cap';
 
@@ -395,6 +404,8 @@
       else if (type === 'ftp4') data = ftp4Links[index];
       else if (type === 'tv') data = tvLinks[index];
       else if (type === 'tv2') data = tv2Links[index];
+      else if (type === 'tv3') data = tv3Links[index];
+      else if (type === 'tv4') data = tv4Links[index];
       else if (type === 'gov') data = govLinks[index];
       else if (type === 'edu') data = eduLinks[index];
 
@@ -421,6 +432,8 @@
       else if (currentEdit.type === 'ftp4') { ftp4Links[currentEdit.index] = { title: nt, url: nu }; targetHost = FTP4_API_HOST; }
       else if (currentEdit.type === 'tv') { tvLinks[currentEdit.index] = { title: nt, url: nu }; targetHost = TV_API_HOST; }
       else if (currentEdit.type === 'tv2') { tv2Links[currentEdit.index] = { title: nt, url: nu }; targetHost = TV2_API_HOST; }
+      else if (currentEdit.type === 'tv3') { tv3Links[currentEdit.index] = { title: nt, url: nu }; }
+      else if (currentEdit.type === 'tv4') { tv4Links[currentEdit.index] = { title: nt, url: nu }; }
       else if (currentEdit.type === 'gov') { govLinks[currentEdit.index] = { title: nt, url: nu }; }
       else if (currentEdit.type === 'edu') { eduLinks[currentEdit.index] = { title: nt, url: nu }; }
 
@@ -428,7 +441,7 @@
         await fetch(`http://${targetHost}/api/links`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ftp: ftpLinks, ftp2: ftp2Links, ftp3: ftp3Links, ftp4: ftp4Links, tv: tvLinks, tv2: tv2Links, gov: govLinks, edu: eduLinks })
+          body: JSON.stringify({ ftp: ftpLinks, ftp2: ftp2Links, ftp3: ftp3Links, ftp4: ftp4Links, tv: tvLinks, tv2: tv2Links, tv3: tv3Links, tv4: tv4Links, gov: govLinks, edu: eduLinks })
         });
       } catch (err) {}
       
