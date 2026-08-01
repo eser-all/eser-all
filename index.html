@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FTP & Live TV Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      min-height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    /* Default Dark Mode Styles */
+    body {
+      margin: 0; padding: 0;
+      background: #121212;
+      color: #f0f0f0;
+      transition: background 0.3s, color 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    /* Light Mode Class */
+    body.light-mode {
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: white;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    .dashboard {
+      position: relative;
+      z-index: 1;
+      padding: 30px 15px 10px;
+      text-align: center;
+    }
+    .section-title {
+      font-size: 24px;
+      margin: 30px 0 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      max-width: 950px;
+      margin: 0 auto;
+    }
+    .link-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: #fff;
+      backdrop-filter: blur(6px);
+      font-size: 15px;
+      box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4);
+      position: relative;
+      min-height: 100px;
+      transition: transform 0.2s, background 0.2s;
+      cursor: pointer;
+    }
+    .link-card:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.18);
+    }
+    .link-card i.fa-play-circle { color: #4CAF50; font-size: 60px; pointer-events: none; }
+    .link-card i.fa-folder-open { color: #FFC107; font-size: 60px; pointer-events: none; }
+    .link-card i.fa-film { color: #E91E63; font-size: 60px; pointer-events: none; }
+    .link-card i.fa-photo-video { color: #9C27B0; font-size: 60px; pointer-events: none; }
+    .link-card i.fa-tv { color: #FF9800; font-size: 60px; pointer-events: none; }
+    .link-card i.fa-desktop { color: #00BCD4; font-size: 60px; pointer-events: none; }
+    .link-card i.fa-landmark { color: #00E676; font-size: 60px; pointer-events: none; }
+    .link-card i.fa-graduation-cap { color: #FF5722; font-size: 60px; pointer-events: none; }
+    .link-card a {
+      color: white;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      height: 100%;
+    }
+    .edit-btn {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: #fff;
+      color: #000;
+      border-radius: 50%;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .modal, .login-modal {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .modal-content {
+      background: #1e1e1e;
+      color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      border: 1px solid #333;
+    }
+    .modal-content input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #444;
+      background: #2a2a2a;
+      color: #fff;
+      border-radius: 4px;
+    }
+    .modal-content button {
+      padding: 8px 12px;
+      margin-right: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .modal-content button:first-of-type { background: #4CAF50; color: white; }
+    #btnCancelLogin { background: #444; color: #fff; }
+    .theme-toggle {
+      position: fixed;
+      left: 20px; bottom: 20px;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      border: 2px solid white;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    .developer-footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 15px 10px;
+      font-size: 14px;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      margin-top: 30px;
+    }
+    .developer-footer span { font-weight: bold; color: #00e676; }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  
+  <div class="dashboard">
+    <div class="section-title"><i class="fas fa-play-circle"></i> FTP Server 1</div>
+    <div class="link-grid" id="ftp-section"></div>
+
+    <div class="section-title"><i class="fas fa-folder-open"></i> FTP Server 2</div>
+    <div class="link-grid" id="ftp2-section"></div>
+
+    <div class="section-title"><i class="fas fa-film"></i> FTP Server 3</div>
+    <div class="link-grid" id="ftp3-section"></div>
+
+    <div class="section-title"><i class="fas fa-photo-video"></i> FTP Server 4</div>
+    <div class="link-grid" id="ftp4-section"></div>
+    
+    <div class="section-title"><i class="fas fa-tv"></i> Live TV 1</div>
+    <div class="link-grid" id="tv-section"></div>
+
+    <div class="section-title"><i class="fas fa-desktop"></i> Live TV 2</div>
+    <div class="link-grid" id="tv2-section"></div>
+
+    <div class="section-title"><i class="fas fa-landmark"></i> Government Services (সরকারি সেবা)</div>
+    <div class="link-grid" id="gov-section"></div>
+
+    <div class="section-title"><i class="fas fa-graduation-cap"></i> University Admissions (বিশ্ববিদ্যালয় ভর্তি)</div>
+    <div class="link-grid" id="edu-section"></div>
+    
+    <div class="dashboard-controls" id="adminControls" style="display: none; margin-top: 20px;">
+      <button id="btnToggleEdit" onclick="toggleEditIcons()" style="padding: 8px 16px; font-weight: bold; cursor: pointer; border-radius: 4px; border: none; background: #fff; color: #000;">Show Edit</button>
+    </div>
+  </div>
+
+  <!-- Theme Toggle Switch Button -->
+  <div class="theme-toggle" onclick="toggleTheme()">
+    <i class="fas fa-moon" id="themeIcon"></i>
+  </div>
+
+  <footer class="developer-footer">
+    Developed by <span>Antu</span>
+  </footer>
+
+  <!-- Edit Modal -->
+  <div class="modal" id="editModal" style="display: none;">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 15px;">Edit Link</h3>
+      <input type="text" id="editTitle" placeholder="Name">
+      <input type="text" id="editURL" placeholder="URL">
+      <button onclick="saveEdit()">Save</button>
+      <button onclick="closeModal()" id="btnCancelEdit" style="background: #555; color: #fff;">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div class="login-modal" id="loginModal" style="display: none;">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 15px;">Admin Login</h3>
+      <input type="password" id="adminPass" placeholder="Enter Admin Password">
+      <button onclick="checkLogin()">Login</button>
+      <button id="btnCancelLogin">Cancel</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    const FTP_API_HOST = '10.10.10.10';
+    const FTP2_API_HOST = '172.16.50.4'; 
+    const FTP3_API_HOST = '172.19.178.179';
+    const FTP4_API_HOST = '10.16.100.244';
+    const TV_API_HOST = '172.28.28.54';
+    const TV2_API_HOST = '172.19.178.180';
+
+    let ftpLinks = [{ title: "FTP Server 1", url: `http://${FTP_API_HOST}/` }];
+    let ftp2Links = [{ title: "FTP Server 2", url: `http://${FTP2_API_HOST}/` }];
+    let ftp3Links = [{ title: "FTP Server 3", url: `http://${FTP3_API_HOST}/` }];
+    let ftp4Links = [{ title: "FTP Server 4", url: `http://${FTP4_API_HOST}/dashboard.php?session=c2c3e6c0aa01b1c155cec1fbab1bc6c47883390af1b4cb470ee461ff53665061` }];
+    let tvLinks = [{ title: "Live TV 1", url: `http://${TV_API_HOST}/` }];
+    let tv2Links = [{ title: "Live TV 2", url: `http://${TV2_API_HOST}/` }];
+
+    let govLinks = [
+      { title: "NID / ভোটার আবেদন", url: "http://services.nidw.gov.bd" },
+      { title: "জন্ম নিবন্ধন ও সংশোধন", url: "http://bdris.gov.bd" },
+      { title: "পাসপোর্টের আবেদন", url: "http://epassport.gov.bd" },
+      { title: "পুলিশ ক্লিয়ারেন্স আবেদন", url: "http://pcc.police.gov.bd" },
+      { title: "টিন (e-TIN) সার্টিফিকেট", url: "http://incometax.gov.bd" }
+    ];
+
+    let eduLinks = [
+      { title: "জিএসটি/গুচ্ছ বিশ্ববিদ্যালয়", url: "http://gstadmission.ac.bd" },
+      { title: "ঢাকা বিশ্ববিদ্যালয়", url: "http://duadmission.eis.du.ac.bd" }
+    ];
+
+    let currentEdit = { type: '', index: -1 };
+    let isAdmin = false, showEditIcons = false;
+
+    function renderLinks() {
+      const ftpc = document.getElementById('ftp-section');
+      const ftp2c = document.getElementById('ftp2-section');
+      const ftp3c = document.getElementById('ftp3-section');
+      const ftp4c = document.getElementById('ftp4-section');
+      const tvc = document.getElementById('tv-section');
+      const tv2c = document.getElementById('tv2-section');
+      const govc = document.getElementById('gov-section');
+      const educ = document.getElementById('edu-section');
+      
+      ftpc.innerHTML = ''; 
+      ftp2c.innerHTML = ''; 
+      ftp3c.innerHTML = ''; 
+      ftp4c.innerHTML = '';
+      tvc.innerHTML = '';
+      tv2c.innerHTML = '';
+      govc.innerHTML = '';
+      educ.innerHTML = '';
+      
+      ftpLinks.forEach((l, i) => { ftpc.innerHTML += genCard(l.title, l.url, 'ftp', i); });
+      ftp2Links.forEach((l, i) => { ftp2c.innerHTML += genCard(l.title, l.url, 'ftp2', i); });
+      ftp3Links.forEach((l, i) => { ftp3c.innerHTML += genCard(l.title, l.url, 'ftp3', i); });
+      ftp4Links.forEach((l, i) => { ftp4c.innerHTML += genCard(l.title, l.url, 'ftp4', i); });
+      tvLinks.forEach((l, i) => { tvc.innerHTML += genCard(l.title, l.url, 'tv', i); });
+      tv2Links.forEach((l, i) => { tv2c.innerHTML += genCard(l.title, l.url, 'tv2', i); });
+      govLinks.forEach((l, i) => { govc.innerHTML += genCard(l.title, l.url, 'gov', i); });
+      eduLinks.forEach((l, i) => { educ.innerHTML += genCard(l.title, l.url, 'edu', i); });
+    }
+
+    function genCard(title, url, type, idx) {
+      let formattedUrl = url || '';
+      if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+        formattedUrl = `http://${formattedUrl}`;
+      }
+
+      let iconClass = 'fas fa-play-circle';
+      if (type === 'ftp2') iconClass = 'fas fa-folder-open';
+      if (type === 'ftp3') iconClass = 'fas fa-film';
+      if (type === 'ftp4') iconClass = 'fas fa-photo-video';
+      if (type === 'tv') iconClass = 'fas fa-tv';
+      if (type === 'tv2') iconClass = 'fas fa-desktop';
+      if (type === 'gov') iconClass = 'fas fa-landmark';
+      if (type === 'edu') iconClass = 'fas fa-graduation-cap';
+
+      return `
+        <div class="link-card" onclick="openTargetUrl(event, '${formattedUrl}')">
+          <a href="${formattedUrl}" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault();">
+            <i class="${iconClass}"></i>
+            <div>${title}</div>
+          </a>
+          ${isAdmin && showEditIcons ? `<div class="edit-btn" onclick="openModal(event, '${type}', ${idx})">Edit</div>` : ''}
+        </div>
+      `;
+    }
+
+    function openTargetUrl(event, url) {
+      if (event.target.classList.contains('edit-btn')) return;
+      window.open(url, '_blank');
+    }
+
+    async function tryFetchAPI(url, callback) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1000);
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          const data = await res.json();
+          callback(data);
+        }
+      } catch (err) {}
+    }
+
+    async function fetchLinks() {
+      renderLinks();
+
+      await tryFetchAPI(`http://${FTP_API_HOST}/api/links`, data => { if(data.ftp) ftpLinks = data.ftp; });
+      await tryFetchAPI(`http://${FTP2_API_HOST}/api/links`, data => { if(data.ftp2) ftp2Links = data.ftp2; });
+      await tryFetchAPI(`http://${FTP3_API_HOST}/api/links`, data => { if(data.ftp3) ftp3Links = data.ftp3; });
+      await tryFetchAPI(`http://${FTP4_API_HOST}/api/links`, data => { if(data.ftp4) ftp4Links = data.ftp4; });
+      await tryFetchAPI(`http://${TV_API_HOST}/api/links`, data => { if(data.tv) tvLinks = data.tv; });
+      await tryFetchAPI(`http://${TV2_API_HOST}/api/links`, data => { if(data.tv2) tv2Links = data.tv2; });
+
+      renderLinks();
+    }
+
+    function openModal(event, type, index) {
+      event.stopPropagation();
+      currentEdit = { type, index };
+      let data;
+      if (type === 'ftp') data = ftpLinks[index];
+      else if (type === 'ftp2') data = ftp2Links[index];
+      else if (type === 'ftp3') data = ftp3Links[index];
+      else if (type === 'ftp4') data = ftp4Links[index];
+      else if (type === 'tv') data = tvLinks[index];
+      else if (type === 'tv2') data = tv2Links[index];
+      else if (type === 'gov') data = govLinks[index];
+      else if (type === 'edu') data = eduLinks[index];
+
+      if (data) {
+        document.getElementById('editTitle').value = data.title || '';
+        document.getElementById('editURL').value = data.url || '';
+        document.getElementById('editModal').style.display = 'flex';
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('editModal').style.display = 'none';
+    }
+
+    async function saveEdit() {
+      const nt = document.getElementById('editTitle').value.trim();
+      const nu = document.getElementById('editURL').value.trim();
+      if (!nt || !nu) return alert('Fill all fields!');
+
+      let targetHost = FTP_API_HOST;
+      if (currentEdit.type === 'ftp') ftpLinks[currentEdit.index] = { title: nt, url: nu };
+      else if (currentEdit.type === 'ftp2') { ftp2Links[currentEdit.index] = { title: nt, url: nu }; targetHost = FTP2_API_HOST; }
+      else if (currentEdit.type === 'ftp3') { ftp3Links[currentEdit.index] = { title: nt, url: nu }; targetHost = FTP3_API_HOST; }
+      else if (currentEdit.type === 'ftp4') { ftp4Links[currentEdit.index] = { title: nt, url: nu }; targetHost = FTP4_API_HOST; }
+      else if (currentEdit.type === 'tv') { tvLinks[currentEdit.index] = { title: nt, url: nu }; targetHost = TV_API_HOST; }
+      else if (currentEdit.type === 'tv2') { tv2Links[currentEdit.index] = { title: nt, url: nu }; targetHost = TV2_API_HOST; }
+      else if (currentEdit.type === 'gov') { govLinks[currentEdit.index] = { title: nt, url: nu }; }
+      else if (currentEdit.type === 'edu') { eduLinks[currentEdit.index] = { title: nt, url: nu }; }
+
+      try {
+        await fetch(`http://${targetHost}/api/links`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ftp: ftpLinks, ftp2: ftp2Links, ftp3: ftp3Links, ftp4: ftp4Links, tv: tvLinks, tv2: tv2Links, gov: govLinks, edu: eduLinks })
+        });
+      } catch (err) {}
+      
+      closeModal();
+      renderLinks();
+    }
+
+    function checkLogin() {
+      if (document.getElementById('adminPass').value === 'admin123') {
+        isAdmin = true;
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('adminControls').style.display = 'block';
+        document.getElementById('adminPass').value = '';
+        renderLinks();
+      } else { alert('Wrong password!'); }
+    }
+
+    function toggleEditIcons() {
+      showEditIcons = !showEditIcons;
+      document.getElementById('btnToggleEdit').textContent = showEditIcons ? 'Hide Edit' : 'Show Edit';
+      renderLinks();
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      const themeIcon = document.getElementById('themeIcon');
+      themeIcon.classList.toggle('fa-moon');
+      themeIcon.classList.toggle('fa-sun');
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.shiftKey && e.key.toLowerCase() === 'a') {
+        document.getElementById('loginModal').style.display = 'flex';
+      }
+    });
+
+    document.getElementById('btnCancelLogin').addEventListener('click', () => {
+      document.getElementById('loginModal').style.display = 'none';
+    });
+
+    window.onload = fetchLinks;
+
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 100, density: { enable: true, value_area: 800 } },
+        color: { value: '#ffffff' },
+        shape: { type: 'circle' },
+        opacity: { value: 0.5, random: true },
+        size: { value: 3, random: true },
+        line_linked: { enable: true, distance: 100, color: '#ffffff', opacity: 0.4, width: 1.2 },
+        move: { enable: true, speed: 1.5 }
+      },
+      interactivity: { events: { onhover: { enable: true, mode: 'grab' } } },
+      retina_detect: true
+    });
+  </script>
+</body>
+</html>
