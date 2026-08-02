@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Home page</title>
+  <title>ESER-ALL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -11,7 +11,6 @@
       min-height: 100%;
       font-family: 'Segoe UI', sans-serif;
     }
-    /* Default Dark Mode Styles */
     body {
       margin: 0; padding: 0;
       background: #121212;
@@ -21,7 +20,6 @@
       flex-direction: column;
       justify-content: space-between;
     }
-    /* Light Mode Class */
     body.light-mode {
       background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
       background-size: 400% 400%;
@@ -66,8 +64,6 @@
       max-width: 950px;
       margin: 0 auto;
     }
-
-    /* Small/Inline Grid for FTP and TV Servers */
     .inline-grid {
       display: flex;
       justify-content: center;
@@ -90,7 +86,6 @@
       font-size: 13px;
       font-weight: 600;
     }
-
     .link-card {
       display: flex;
       flex-direction: column;
@@ -227,7 +222,7 @@
 <body>
   <div id="particles-js"></div>
   
-  <!-- User Login Modal (Required for Access) -->
+  <!-- User Login Modal -->
   <div class="user-login-modal" id="userLoginModal">
     <div class="modal-content">
       <h3 style="margin-bottom: 15px;"><i class="fas fa-lock"></i> User Access Login</h3>
@@ -261,7 +256,7 @@
     </div>
   </div>
 
-  <!-- Theme Toggle Switch Button -->
+  <!-- Theme Toggle Button -->
   <div class="theme-toggle" onclick="toggleTheme()">
     <i class="fas fa-moon" id="themeIcon"></i>
   </div>
@@ -305,9 +300,15 @@
     const TV_API_HOST = '172.28.28.54';
     const TV2_API_HOST = '172.19.178.180';
 
-    // User Credentials Definition
-    const VALID_USER_ID = "user";
-    const VALID_USER_PASS = "1234";
+    // -------------------------------------------------------------
+    // এখানে আপনার ইচ্ছেমতো একাধিক ইউজার আইডি ও পাসওয়ার্ড যোগ করুন
+    // -------------------------------------------------------------
+    const validUsers = [
+      { id: "user1", pass: "1234" },
+      { id: "user2", pass: "5678" },
+      { id: "antu",  pass: "antu2026" },
+      { id: "client1", pass: "client@123" }
+    ];
 
     let ftpLinks = [{ title: "FTP Server 1", url: `http://${FTP_API_HOST}/` }];
     let ftp2Links = [{ title: "FTP Server 2", url: `http://${FTP2_API_HOST}/` }];
@@ -338,13 +339,16 @@
     let currentEdit = { type: '', index: -1 };
     let isAdmin = false, showEditIcons = false;
 
-    // User Login Check Function
+    // Check Multiple Users
     function checkUserLogin() {
       const uid = document.getElementById('userInputId').value.trim();
       const upass = document.getElementById('userInputPass').value.trim();
 
-      if (uid === VALID_USER_ID && upass === VALID_USER_PASS) {
+      const foundUser = validUsers.find(u => u.id === uid && u.pass === upass);
+
+      if (foundUser) {
         sessionStorage.setItem('isUserLoggedIn', 'true');
+        sessionStorage.setItem('loggedInUser', foundUser.id);
         showDashboard();
       } else {
         alert('Invalid User ID or Password!');
@@ -360,6 +364,7 @@
 
     function userLogout() {
       sessionStorage.removeItem('isUserLoggedIn');
+      sessionStorage.removeItem('loggedInUser');
       location.reload();
     }
 
