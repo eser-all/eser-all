@@ -20,19 +20,20 @@
     .dashboard { position: relative; z-index: 1; padding: 30px 15px 10px; text-align: center; }
     .main-header { font-size: 32px; font-weight: bold; margin-bottom: 25px; }
     .section-title { font-size: 22px; margin: 25px 0 15px; display: flex; justify-content: center; align-items: center; gap: 10px; }
-    .link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; max-width: 950px; margin: 0 auto; }
+    .link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; max-width: 950px; margin: 0 auto; }
     .inline-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 12px; max-width: 950px; margin: 0 auto 20px auto; }
     .compact-card { padding: 10px 14px; min-height: auto; flex: 1 1 120px; max-width: 200px; }
-    .compact-card i { font-size: 28px !important; }
+    .compact-card i { font-size: 28px !important; margin-bottom: 5px; }
     .compact-card div { font-size: 13px; font-weight: 600; }
     .link-card {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 12px; color: #fff; backdrop-filter: blur(6px); font-size: 15px;
       box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4); position: relative; min-height: 100px; cursor: pointer;
+      transition: all 0.2s ease-in-out;
     }
+    .link-card i { font-size: 32px; margin-bottom: 8px; }
     .link-card:hover { transform: translateY(-3px); background: rgba(255, 255, 255, 0.18); }
-    .link-card a { color: white; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; height: 100%; }
     .user-login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 999; }
     .modal-content { background: #1e1e1e; color: #fff; padding: 20px; border-radius: 10px; width: 320px; border: 1px solid #333; text-align: center; }
     .modal-content input { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #444; background: #2a2a2a; color: #fff; border-radius: 4px; }
@@ -109,7 +110,6 @@
     const TV_API_HOST = '172.28.28.54';
     const TV2_API_HOST = '172.19.178.180';
 
-    // Firebase Auth ভিত্তিক লগইন ফাংশন
     function checkUserLogin() {
       const email = document.getElementById('userInputEmail').value.trim();
       const pass = document.getElementById('userInputPass').value.trim();
@@ -128,7 +128,6 @@
         });
     }
 
-    // অটো সেশন চেক (Firebase Auth)
     auth.onAuthStateChanged((user) => {
       if (user) {
         showDashboard();
@@ -171,6 +170,7 @@
     let ftp2Links = [{ title: "FTP Server 2", url: `http://${FTP2_API_HOST}/` }];
     let ftp3Links = [{ title: "FTP Server 3", url: `http://${FTP3_API_HOST}/` }];
     let ftp4Links = [{ title: "FTP Server 4", url: `http://${FTP4_API_HOST}/` }];
+    
     let tvLinks = [{ title: "Live TV 1", url: `http://${TV_API_HOST}/` }];
     let tv2Links = [{ title: "Live TV 2", url: `http://${TV2_API_HOST}/` }];
     let tv3Links = [{ title: "Live TV 3", url: "https://toffeelive.com" }];
@@ -184,7 +184,7 @@
 
     let eduLinks = [
       { title: "ঢাকা বিশ্ববিদ্যালয়", url: "http://duadmission.eis.du.ac.bd" },
-      { title: "জাতীয় বিশ্ববিদ্যালয় रिजल्ट", url: "http://results.nu.ac.bd/" }
+      { title: "জাতীয় বিশ্ববিদ্যালয় রেজাল্ট", url: "http://results.nu.ac.bd/" }
     ];
 
     function renderLinks() {
@@ -193,26 +193,39 @@
       const govc = document.getElementById('gov-section');
       const educ = document.getElementById('edu-section');
       
-      ftpAllContainer.innerHTML = ''; tvAllContainer.innerHTML = ''; govc.innerHTML = ''; educ.innerHTML = '';
+      ftpAllContainer.innerHTML = ''; 
+      tvAllContainer.innerHTML = ''; 
+      govc.innerHTML = ''; 
+      educ.innerHTML = '';
       
-      ftpLinks.forEach((l) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp', true); });
-      ftp2Links.forEach((l) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp2', true); });
-      ftp3Links.forEach((l) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp3', true); });
-      ftp4Links.forEach((l) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp4', true); });
+      // Render FTP Links
+      ftpLinks.concat(ftp2Links, ftp3Links, ftp4Links).forEach((l) => { 
+        ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp', true); 
+      });
 
-      tvLinks.forEach((l) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv', true); });
-      tv2Links.forEach((l) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv2', true); });
-      tv3Links.forEach((l) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv3', true); });
-      tv4Links.forEach((l) => { tv4Container.innerHTML += genCard(l.title, l.url, 'tv4', true); });
+      // Render Live TV Links
+      tvLinks.concat(tv2Links, tv3Links, tv4Links).forEach((l) => { 
+        tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv', true); 
+      });
 
-      govLinks.forEach((l) => { govc.innerHTML += genCard(l.title, l.url, 'gov', false); });
-      eduLinks.forEach((l) => { educ.innerHTML += genCard(l.title, l.url, 'edu', false); });
+      // Render Government Links
+      govLinks.forEach((l) => { 
+        govc.innerHTML += genCard(l.title, l.url, 'gov', false); 
+      });
+
+      // Render Education Links
+      eduLinks.forEach((l) => { 
+        educ.innerHTML += genCard(l.title, l.url, 'edu', false); 
+      });
     }
 
     function genCard(title, url, type, isCompact = false) {
-      let iconClass = 'fas fa-play-circle';
+      let iconClass = 'fas fa-globe';
+      if (type === 'ftp') iconClass = 'fas fa-server';
+      if (type === 'tv') iconClass = 'fas fa-tv';
       if (type === 'gov') iconClass = 'fas fa-landmark';
       if (type === 'edu') iconClass = 'fas fa-graduation-cap';
+      
       const compactClass = isCompact ? 'compact-card' : '';
 
       return `
