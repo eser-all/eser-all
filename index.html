@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ESER-ALL</title>
+  <title>Home page</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -146,7 +146,7 @@
       cursor: pointer;
       z-index: 10;
     }
-    .modal, .login-modal {
+    .modal, .login-modal, .user-login-modal {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.85);
@@ -160,27 +160,28 @@
       color: #fff;
       padding: 20px;
       border-radius: 10px;
-      width: 300px;
+      width: 320px;
       border: 1px solid #333;
+      text-align: center;
     }
     .modal-content input {
       width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
+      padding: 10px;
+      margin-bottom: 12px;
       border: 1px solid #444;
       background: #2a2a2a;
       color: #fff;
       border-radius: 4px;
     }
     .modal-content button {
-      padding: 8px 12px;
-      margin-right: 10px;
+      padding: 8px 16px;
+      margin-right: 5px;
       cursor: pointer;
       border: none;
       border-radius: 4px;
       font-weight: bold;
     }
-    .modal-content button:first-of-type { background: #4CAF50; color: white; }
+    .modal-content button.btn-primary { background: #4CAF50; color: white; width: 100%; }
     #btnCancelLogin { background: #444; color: #fff; }
     .theme-toggle {
       position: fixed;
@@ -194,6 +195,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    .logout-btn {
+      position: fixed;
+      right: 20px; bottom: 20px;
+      padding: 10px 16px;
+      border-radius: 20px;
+      border: none;
+      background: #e91e63;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
       cursor: pointer;
       z-index: 1000;
     }
@@ -213,14 +227,24 @@
 <body>
   <div id="particles-js"></div>
   
-  <div class="dashboard">
+  <!-- User Login Modal (Required for Access) -->
+  <div class="user-login-modal" id="userLoginModal">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 15px;"><i class="fas fa-lock"></i> User Access Login</h3>
+      <input type="text" id="userInputId" placeholder="User ID">
+      <input type="password" id="userInputPass" placeholder="Password">
+      <button class="btn-primary" onclick="checkUserLogin()">Login</button>
+    </div>
+  </div>
+
+  <div class="dashboard" id="mainDashboard" style="display: none;">
     <div class="main-header">ESER-ALL Portal</div>
 
-    <!-- FTP Servers Section (Combined into 1 row) -->
+    <!-- FTP Servers Section -->
     <div class="section-title"><i class="fas fa-server"></i> FTP Servers</div>
     <div class="inline-grid" id="ftp-all-section"></div>
 
-    <!-- Live TV Section (Combined into 1 row) -->
+    <!-- Live TV Section -->
     <div class="section-title"><i class="fas fa-tv"></i> Live TV</div>
     <div class="inline-grid" id="tv-all-section"></div>
 
@@ -242,8 +266,13 @@
     <i class="fas fa-moon" id="themeIcon"></i>
   </div>
 
+  <!-- Logout Button -->
+  <button class="logout-btn" id="btnLogout" style="display: none;" onclick="userLogout()">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </button>
+
   <footer class="developer-footer">
-    Developed by <span>Nityananda Halder Antu</span>
+    Developed by <span>Antu</span>
   </footer>
 
   <!-- Edit Modal -->
@@ -252,17 +281,17 @@
       <h3 style="margin-bottom: 15px;">Edit Link</h3>
       <input type="text" id="editTitle" placeholder="Name">
       <input type="text" id="editURL" placeholder="URL">
-      <button onclick="saveEdit()">Save</button>
+      <button onclick="saveEdit()" style="background: #4CAF50; color: white;">Save</button>
       <button onclick="closeModal()" id="btnCancelEdit" style="background: #555; color: #fff;">Cancel</button>
     </div>
   </div>
 
-  <!-- Login Modal -->
+  <!-- Admin Login Modal -->
   <div class="login-modal" id="loginModal" style="display: none;">
     <div class="modal-content">
       <h3 style="margin-bottom: 15px;">Admin Login</h3>
       <input type="password" id="adminPass" placeholder="Enter Admin Password">
-      <button onclick="checkLogin()">Login</button>
+      <button onclick="checkLogin()" style="background: #4CAF50; color: white;">Login</button>
       <button id="btnCancelLogin">Cancel</button>
     </div>
   </div>
@@ -276,6 +305,10 @@
     const TV_API_HOST = '172.28.28.54';
     const TV2_API_HOST = '172.19.178.180';
 
+    // User Credentials Definition
+    const VALID_USER_ID = "user";
+    const VALID_USER_PASS = "1234";
+
     let ftpLinks = [{ title: "FTP Server 1", url: `http://${FTP_API_HOST}/` }];
     let ftp2Links = [{ title: "FTP Server 2", url: `http://${FTP2_API_HOST}/` }];
     let ftp3Links = [{ title: "FTP Server 3", url: `http://${FTP3_API_HOST}/` }];
@@ -284,7 +317,7 @@
     let tvLinks = [{ title: "Live TV 1", url: `http://${TV_API_HOST}/` }];
     let tv2Links = [{ title: "Live TV 2", url: `http://${TV2_API_HOST}/` }];
     let tv3Links = [{ title: "Live TV 3", url: "https://toffeelive.com/en/watch/qnv835oBcqxnFHJBuQcB" }];
-    let tv4Links = [{ title: "Live TV 4", url: "https://www.jagobd.com/asiantv" }];
+    let tv4Links = [{ title: "Live TV 4", url: "https://www.jagobd.com/" }];
 
     let govLinks = [
       { title: "NID / ভোটার আবেদন", url: "http://services.nidw.gov.bd" },
@@ -299,11 +332,36 @@
       { title: "ঢাকা বিশ্ববিদ্যালয়", url: "http://duadmission.eis.du.ac.bd" },
       { title: "জাতীয় বিশ্ববিদ্যালয় ভর্তি", url: "http://app11.nu.edu.bd/" },
       { title: "জাতীয় বিশ্ববিদ্যালয় রেজাল্ট", url: "http://results.nu.ac.bd/" },
-      { title: "জেএসসি/জেডিসি/এসএসসি/এইচএসসি পরীক্ষার রেজাল্ট", url: "https://www.educationboardresults.gov.bd/v2/home" }
+      { title: "জেএসসি/জেডিসি/এসএসসি/দাখিল/এইচএসসি/আলিম ও সমমানের পরীক্ষা", url: "https://www.educationboardresults.gov.bd/v2/home" }
     ];
 
     let currentEdit = { type: '', index: -1 };
     let isAdmin = false, showEditIcons = false;
+
+    // User Login Check Function
+    function checkUserLogin() {
+      const uid = document.getElementById('userInputId').value.trim();
+      const upass = document.getElementById('userInputPass').value.trim();
+
+      if (uid === VALID_USER_ID && upass === VALID_USER_PASS) {
+        sessionStorage.setItem('isUserLoggedIn', 'true');
+        showDashboard();
+      } else {
+        alert('Invalid User ID or Password!');
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('userLoginModal').style.display = 'none';
+      document.getElementById('mainDashboard').style.display = 'block';
+      document.getElementById('btnLogout').style.display = 'block';
+      fetchLinks();
+    }
+
+    function userLogout() {
+      sessionStorage.removeItem('isUserLoggedIn');
+      location.reload();
+    }
 
     function renderLinks() {
       const ftpAllContainer = document.getElementById('ftp-all-section');
@@ -316,19 +374,16 @@
       govc.innerHTML = '';
       educ.innerHTML = '';
       
-      // Render FTP Servers in 1 row (compact style)
       ftpLinks.forEach((l, i) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp', i, true); });
       ftp2Links.forEach((l, i) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp2', i, true); });
       ftp3Links.forEach((l, i) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp3', i, true); });
       ftp4Links.forEach((l, i) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp4', i, true); });
 
-      // Render Live TV in 1 row (compact style)
       tvLinks.forEach((l, i) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv', i, true); });
       tv2Links.forEach((l, i) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv2', i, true); });
       tv3Links.forEach((l, i) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv3', i, true); });
       tv4Links.forEach((l, i) => { tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv4', i, true); });
 
-      // Render Gov and Edu
       govLinks.forEach((l, i) => { govc.innerHTML += genCard(l.title, l.url, 'gov', i, false); });
       eduLinks.forEach((l, i) => { educ.innerHTML += genCard(l.title, l.url, 'edu', i, false); });
     }
@@ -482,7 +537,13 @@
       document.getElementById('loginModal').style.display = 'none';
     });
 
-    window.onload = fetchLinks;
+    window.onload = function() {
+      if (sessionStorage.getItem('isUserLoggedIn') === 'true') {
+        showDashboard();
+      } else {
+        document.getElementById('userLoginModal').style.display = 'flex';
+      }
+    };
 
     particlesJS('particles-js', {
       particles: {
