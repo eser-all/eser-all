@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>E-SERVICES</title>
+  <title>ESER-ALL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -170,13 +170,20 @@
     }
     .modal-content button {
       padding: 8px 16px;
-      margin-right: 5px;
+      margin-top: 5px;
       cursor: pointer;
       border: none;
       border-radius: 4px;
       font-weight: bold;
     }
     .modal-content button.btn-primary { background: #4CAF50; color: white; width: 100%; }
+    .auth-toggle-link {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #00e676;
+      cursor: pointer;
+      text-decoration: underline;
+    }
     #btnCancelLogin { background: #444; color: #fff; }
     .theme-toggle {
       position: fixed;
@@ -222,13 +229,25 @@
 <body>
   <div id="particles-js"></div>
   
-  <!-- User Login Modal -->
+  <!-- User Access Modal -->
   <div class="user-login-modal" id="userLoginModal">
-    <div class="modal-content">
+    <!-- Login Form -->
+    <div class="modal-content" id="loginBox">
       <h3 style="margin-bottom: 15px;"><i class="fas fa-lock"></i> User Access Login</h3>
-      <input type="text" id="userInputId" placeholder="User ID">
+      <input type="text" id="userInputId" placeholder="User ID or Email">
       <input type="password" id="userInputPass" placeholder="Password">
       <button class="btn-primary" onclick="checkUserLogin()">Login</button>
+      <div class="auth-toggle-link" onclick="toggleAuthMode('signup')">Don't have an ID? Create One</div>
+    </div>
+
+    <!-- Sign Up Form (With Email Field) -->
+    <div class="modal-content" id="signupBox" style="display: none;">
+      <h3 style="margin-bottom: 15px;"><i class="fas fa-user-plus"></i> Create New User</h3>
+      <input type="text" id="newUserId" placeholder="Choose User ID">
+      <input type="email" id="newUserEmail" placeholder="Enter Email ID">
+      <input type="password" id="newUserPass" placeholder="Choose Password">
+      <button class="btn-primary" style="background: #2196F3;" onclick="createNewUser()">Create Account</button>
+      <div class="auth-toggle-link" onclick="toggleAuthMode('login')">Already have an ID? Login</div>
     </div>
   </div>
 
@@ -300,15 +319,81 @@
     const TV_API_HOST = '172.28.28.54';
     const TV2_API_HOST = '172.19.178.180';
 
-    // -------------------------------------------------------------
-    // এখানে আপনার ইচ্ছেমতো একাধিক ইউজার আইডি ও পাসওয়ার্ড যোগ করুন
-    // -------------------------------------------------------------
-    const validUsers = [
-      { id: "user1", pass: "1234" },
-      { id: "user2", pass: "5678" },
-      { id: "antu",  pass: "antu2026" },
-      { id: "client1", pass: "client@123" }
+    // ডিফল্ট ইউজার তালিকা (Email সহ)
+    const defaultUsers = [
+      { id: "user1", email: "user1@gmail.com", pass: "1234" },
+      { id: "antu", email: "antu@gmail.com", pass: "antu2026" }
     ];
+
+    // LocalStorage থেকে ডাটা নেওয়া
+    function getUsers() {
+      const stored = localStorage.getItem('eser_app_users');
+      if (stored) {
+        return JSON.parse(stored);
+      } else {
+        localStorage.setItem('eser_app_users', JSON.stringify(defaultUsers));
+        return defaultUsers;
+      }
+    }
+
+    // Toggle Sign Up and Login Forms
+    function toggleAuthMode(mode) {
+      if (mode === 'signup') {
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('signupBox').style.display = 'block';
+      } else {
+        document.getElementById('signupBox').style.display = 'none';
+        document.getElementById('loginBox').style.display = 'block';
+      }
+    }
+
+    // Email validation helper
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    // New User Registration with Email
+    function createNewUser() {
+      const newId = document.getElementById('newUserId').value.trim();
+      const newEmail = document.getElementById('newUserEmail').value.trim();
+      const newPass = document.getElementById('newUserPass').value.trim();
+
+      if (!newId || !newEmail || !newPass) {
+        alert('Please fill in User ID, Email, and Password!');
+        return;
+      }
+
+      if (!validateEmail(newEmail)) {
+        alert('Please enter a valid Email address!');
+        return;
+      }
+
+      const users = getUsers();
+      
+      // Check User ID duplicate
+      const idExists = users.some(u => u.id.toLowerCase() === newId.toLowerCase());
+      if (idExists) {
+        alert('This User ID is already taken!');
+        return;
+      }
+
+      // Check Email duplicate
+      const emailExists = users.some(u => u.email && u.email.toLowerCase() === newEmail.toLowerCase());
+      if (emailExists) {
+        alert('This Email ID is already registered!');
+        return;
+      }
+
+      users.push({ id: newId, email: newEmail, pass: newPass });
+      localStorage.setItem('eser_app_users', JSON.stringify(users));
+
+      alert('Account created successfully! You can now login.');
+      document.getElementById('newUserId').value = '';
+      document.getElementById('newUserEmail').value = '';
+      document.getElementById('newUserPass').value = '';
+      toggleAuthMode('login');
+    }
 
     let ftpLinks = [{ title: "FTP Server 1", url: `http://${FTP_API_HOST}/` }];
     let ftp2Links = [{ title: "FTP Server 2", url: `http://${FTP2_API_HOST}/` }];
@@ -339,19 +424,23 @@
     let currentEdit = { type: '', index: -1 };
     let isAdmin = false, showEditIcons = false;
 
-    // Check Multiple Users
+    // Login Check (Allows login via ID or Email)
     function checkUserLogin() {
-      const uid = document.getElementById('userInputId').value.trim();
+      const input = document.getElementById('userInputId').value.trim();
       const upass = document.getElementById('userInputPass').value.trim();
 
-      const foundUser = validUsers.find(u => u.id === uid && u.pass === upass);
+      const users = getUsers();
+      const foundUser = users.find(u => 
+        (u.id.toLowerCase() === input.toLowerCase() || (u.email && u.email.toLowerCase() === input.toLowerCase())) && 
+        u.pass === upass
+      );
 
       if (foundUser) {
         sessionStorage.setItem('isUserLoggedIn', 'true');
         sessionStorage.setItem('loggedInUser', foundUser.id);
         showDashboard();
       } else {
-        alert('Invalid User ID or Password!');
+        alert('Invalid User ID/Email or Password!');
       }
     }
 
@@ -543,6 +632,7 @@
     });
 
     window.onload = function() {
+      getUsers();
       if (sessionStorage.getItem('isUserLoggedIn') === 'true') {
         showDashboard();
       } else {
