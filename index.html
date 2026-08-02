@@ -8,35 +8,58 @@
   <style>
     /* CSS Variables for Themes */
     :root {
-      --bg-color: #121212;
-      --text-color: #f0f0f0;
+      --bg-color: #0f172a;
+      --text-color: #f8fafc;
       --card-bg: rgba(255, 255, 255, 0.08);
       --card-border: rgba(255, 255, 255, 0.15);
-      --card-hover: rgba(255, 255, 255, 0.18);
-      --modal-bg: #1e1e1e;
-      --modal-border: #333;
-      --input-bg: #2a2a2a;
-      --input-border: #444;
-      --footer-bg: rgba(0, 0, 0, 0.4);
-      --icon-color: #00e676;
+      --card-hover: rgba(255, 255, 255, 0.2);
+      --modal-bg: #1e293b;
+      --modal-border: #334155;
+      --input-bg: #0f172a;
+      --input-border: #475569;
+      --footer-bg: rgba(15, 23, 42, 0.6);
+      --icon-color: #38bdf8;
+      --bg-overlay: rgba(15, 23, 42, 0.75);
     }
 
     [data-theme="light"] {
-      --bg-color: #f4f6f9;
-      --text-color: #1a1a1a;
-      --card-bg: #ffffff;
-      --card-border: rgba(0, 0, 0, 0.1);
-      --card-hover: #eef2f5;
+      --bg-color: #e0f2fe; /* Light Sky Blue */
+      --text-color: #0c4a6e; /* Deep Navy Blue for text readability */
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(56, 189, 248, 0.3);
+      --card-hover: #ffffff;
       --modal-bg: #ffffff;
-      --modal-border: #ddd;
-      --input-bg: #f0f0f0;
-      --input-border: #ccc;
-      --footer-bg: rgba(0, 0, 0, 0.05);
-      --icon-color: #2e7d32;
+      --modal-border: #bae6fd;
+      --input-bg: #f0f9ff;
+      --input-border: #7dd3fc;
+      --footer-bg: rgba(224, 242, 254, 0.85);
+      --icon-color: #0284c7; /* Sky Blue Accent */
+      --bg-overlay: rgba(224, 242, 254, 0.45);
+    }
+
+    /* Sky-Blue Auto-Transition for Light Mode */
+    [data-theme="light"] body {
+      animation: skyColorShift 18s infinite alternate ease-in-out;
+    }
+
+    @keyframes skyColorShift {
+      0% {
+        background-color: #e0f2fe; /* Light Sky Blue */
+      }
+      33% {
+        background-color: #bae6fd; /* Soft Azure Sky */
+      }
+      66% {
+        background-color: #e0f7fa; /* Cyan Mist */
+      }
+      100% {
+        background-color: #f0f9ff; /* Horizon Blue */
+      }
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { min-height: 100%; font-family: 'Segoe UI', sans-serif; }
+    
     body {
       margin: 0; padding: 0;
       background: var(--bg-color);
@@ -44,12 +67,39 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: background 0.5s ease, color 0.5s ease;
+      position: relative;
     }
 
-    #particles-js { position: fixed; width: 100%; height: 100%; z-index: 0; }
+    /* Background Video Container */
+    .bg-video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .bg-video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.85) contrast(1.05);
+    }
+
+    .bg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-overlay);
+      transition: background 0.5s ease;
+    }
     
-    /* Theme Switcher Button */
+    /* Sky-Blue Styled Theme Switcher Button */
     .theme-toggle-btn {
       position: fixed;
       top: 20px;
@@ -58,24 +108,43 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       color: var(--text-color);
-      padding: 10px 14px;
+      padding: 10px 16px;
       border-radius: 50px;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
       font-weight: bold;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
       transition: all 0.3s ease;
     }
     .theme-toggle-btn:hover {
       background: var(--card-hover);
+      transform: scale(1.03);
     }
 
     .dashboard { position: relative; z-index: 1; padding: 30px 15px 10px; text-align: center; }
-    .main-header { font-size: 32px; font-weight: bold; margin-bottom: 25px; margin-top: 10px; }
-    .section-title { font-size: 22px; margin: 25px 0 15px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+    .main-header { 
+      font-size: 32px; 
+      font-weight: 800; 
+      margin-bottom: 25px; 
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+    }
+    .section-title { 
+      font-size: 22px; 
+      margin: 25px 0 15px; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      gap: 10px;
+      color: var(--text-color);
+    }
+    .section-title i {
+      color: var(--icon-color);
+    }
+
     .link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; max-width: 950px; margin: 0 auto; }
     .inline-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 12px; max-width: 950px; margin: 0 auto 20px auto; }
     
@@ -84,47 +153,71 @@
     .compact-card div { font-size: 13px; font-weight: 600; }
     
     .link-card {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center;
       padding: 16px; 
       background: var(--card-bg); 
       border: 1px solid var(--card-border);
-      border-radius: 12px; 
+      border-radius: 14px; 
       color: var(--text-color); 
-      backdrop-filter: blur(6px); 
+      backdrop-filter: blur(10px); 
       font-size: 15px;
-      box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15); 
+      font-weight: 600;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08); 
       position: relative; 
       min-height: 100px; 
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .link-card i { font-size: 32px; margin-bottom: 8px; color: var(--text-color); }
-    .link-card:hover { transform: translateY(-3px); background: var(--card-hover); }
+    .link-card i { 
+      font-size: 32px; 
+      margin-bottom: 8px; 
+      color: var(--icon-color); 
+      transition: transform 0.2s ease;
+    }
+    .link-card:hover { 
+      transform: translateY(-4px); 
+      background: var(--card-hover);
+      box-shadow: 0 12px 20px rgba(2, 132, 199, 0.2);
+    }
+    .link-card:hover i {
+      transform: scale(1.1);
+    }
 
-    .user-login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 999; }
-    .modal-content { background: var(--modal-bg); color: var(--text-color); padding: 20px; border-radius: 10px; width: 320px; border: 1px solid var(--modal-border); text-align: center; }
-    .modal-content input { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text-color); border-radius: 4px; }
-    .modal-content button { padding: 10px 16px; margin-top: 5px; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; background: #4CAF50; color: white; width: 100%; }
+    .user-login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); display: flex; justify-content: center; align-items: center; z-index: 999; }
+    .modal-content { background: var(--modal-bg); color: var(--text-color); padding: 24px; border-radius: 14px; width: 320px; border: 1px solid var(--modal-border); text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); }
+    .modal-content input { width: 100%; padding: 10px 12px; margin-bottom: 12px; border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text-color); border-radius: 6px; outline: none; }
+    .modal-content button { padding: 10px 16px; margin-top: 5px; cursor: pointer; border: none; border-radius: 6px; font-weight: bold; background: #0284c7; color: white; width: 100%; transition: background 0.2s; }
+    .modal-content button:hover { background: #0369a1; }
+
+    .logout-btn { position: fixed; left: 20px; bottom: 20px; padding: 10px 18px; border-radius: 20px; border: none; background: #e11d48; color: white; font-size: 14px; font-weight: bold; cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(225, 29, 72, 0.3); }
     
-    .logout-btn { position: fixed; left: 20px; bottom: 20px; padding: 10px 16px; border-radius: 20px; border: none; background: #e91e63; color: white; font-size: 14px; font-weight: bold; cursor: pointer; z-index: 1000; }
-    
-    .developer-footer { position: relative; z-index: 1; text-align: center; padding: 15px 10px; font-size: 14px; background: var(--footer-bg); margin-top: 30px; }
+    .developer-footer { position: relative; z-index: 1; text-align: center; padding: 15px 10px; font-size: 14px; background: var(--footer-bg); margin-top: 30px; backdrop-filter: blur(8px); }
     .developer-footer span { font-weight: bold; color: var(--icon-color); }
   </style>
 </head>
 <body>
-  <div id="particles-js"></div>
+
+  <!-- Sky & Mountain Background Video -->
+  <div class="bg-video-container">
+    <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1506744038136-46273834b3fb">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-timelapse-of-clouds-and-mountains-2408-large.mp4" type="video/mp4">
+    </video>
+    <div class="bg-overlay"></div>
+  </div>
 
   <!-- Mode Switcher Button -->
   <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
     <i class="fas fa-moon" id="themeIcon"></i>
-    <span id="themeText">Dark</span>
+    <span id="themeText">Dark Sky</span>
   </button>
 
   <!-- User Access Modal -->
   <div class="user-login-modal" id="userLoginModal">
     <div class="modal-content" id="loginBox">
-      <h3 style="margin-bottom: 15px;"><i class="fas fa-lock"></i> User Access Login</h3>
+      <h3 style="margin-bottom: 15px;"><i class="fas fa-lock" style="color: var(--icon-color);"></i> User Access Login</h3>
       <input type="email" id="userInputEmail" placeholder="Email Address">
       <input type="password" id="userInputPass" placeholder="Password">
       <button onclick="checkUserLogin()">Login</button>
@@ -155,8 +248,6 @@
     Developed by <span>Antu</span>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -165,7 +256,7 @@
   <script>
     // Theme Management Script
     function initTheme() {
-      const savedTheme = localStorage.getItem('theme') || 'dark';
+      const savedTheme = localStorage.getItem('theme') || 'light';
       document.documentElement.setAttribute('data-theme', savedTheme);
       updateThemeUI(savedTheme);
     }
@@ -183,10 +274,10 @@
       const text = document.getElementById('themeText');
       if (theme === 'light') {
         icon.className = 'fas fa-sun';
-        text.innerText = 'Light';
+        text.innerText = 'Sky Light';
       } else {
         icon.className = 'fas fa-moon';
-        text.innerText = 'Dark';
+        text.innerText = 'Night Sky';
       }
     }
 
@@ -255,21 +346,6 @@
         location.reload();
       });
     }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      if (typeof particlesJS !== 'undefined') {
-        particlesJS('particles-js', {
-          particles: {
-            number: { value: 50 },
-            color: { value: '#888888' },
-            shape: { type: 'circle' },
-            opacity: { value: 0.3 },
-            size: { value: 3 },
-            move: { enable: true, speed: 2 }
-          }
-        });
-      }
-    });
 
     let ftpLinks = [{ title: "FTP Server 1", url: `http://${FTP_API_HOST}/` }];
     let ftp2Links = [{ title: "FTP Server 2", url: `http://${FTP2_API_HOST}/` }];
