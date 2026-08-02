@@ -24,7 +24,7 @@
 
     [data-theme="light"] {
       --bg-color: #e0f2fe; /* Light Sky Blue */
-      --text-color: #0c4a6e; /* Deep Navy Blue for text readability */
+      --text-color: #0c4a6e; /* Deep Navy Blue */
       --card-bg: rgba(255, 255, 255, 0.85);
       --card-border: rgba(56, 189, 248, 0.3);
       --card-hover: #ffffff;
@@ -43,18 +43,10 @@
     }
 
     @keyframes skyColorShift {
-      0% {
-        background-color: #e0f2fe; /* Light Sky Blue */
-      }
-      33% {
-        background-color: #bae6fd; /* Soft Azure Sky */
-      }
-      66% {
-        background-color: #e0f7fa; /* Cyan Mist */
-      }
-      100% {
-        background-color: #f0f9ff; /* Horizon Blue */
-      }
+      0% { background-color: #e0f2fe; }
+      33% { background-color: #bae6fd; }
+      66% { background-color: #e0f7fa; }
+      100% { background-color: #f0f9ff; }
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -74,117 +66,82 @@
     /* Background Video Container */
     .bg-video-container {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: 0;
+      top: 0; left: 0; width: 100%; height: 100%;
+      overflow: hidden; z-index: 0;
     }
 
     .bg-video-container video {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: cover;
       filter: brightness(0.85) contrast(1.05);
     }
 
     .bg-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0; width: 100%; height: 100%;
       background: var(--bg-overlay);
       transition: background 0.5s ease;
     }
     
     /* Sky-Blue Styled Theme Switcher Button */
     .theme-toggle-btn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1001;
+      position: fixed; top: 20px; right: 20px; z-index: 1001;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       color: var(--text-color);
-      padding: 10px 16px;
-      border-radius: 50px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: bold;
-      backdrop-filter: blur(8px);
+      padding: 10px 16px; border-radius: 50px;
+      cursor: pointer; display: flex; align-items: center; gap: 8px;
+      font-weight: bold; backdrop-filter: blur(8px);
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
       transition: all 0.3s ease;
     }
-    .theme-toggle-btn:hover {
-      background: var(--card-hover);
-      transform: scale(1.03);
-    }
+    .theme-toggle-btn:hover { background: var(--card-hover); transform: scale(1.03); }
 
     .dashboard { position: relative; z-index: 1; padding: 30px 15px 10px; text-align: center; }
-    .main-header { 
-      font-size: 32px; 
-      font-weight: 800; 
-      margin-bottom: 25px; 
-      margin-top: 10px;
-      letter-spacing: 0.5px;
-    }
-    .section-title { 
-      font-size: 22px; 
-      margin: 25px 0 15px; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      gap: 10px;
-      color: var(--text-color);
-    }
-    .section-title i {
-      color: var(--icon-color);
-    }
+    .main-header { font-size: 32px; font-weight: 800; margin-bottom: 25px; margin-top: 10px; letter-spacing: 0.5px; }
+    .section-title { font-size: 22px; margin: 25px 0 15px; display: flex; justify-content: center; align-items: center; gap: 10px; color: var(--text-color); }
+    .section-title i { color: var(--icon-color); }
 
     .link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; max-width: 950px; margin: 0 auto; }
     .inline-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 12px; max-width: 950px; margin: 0 auto 20px auto; }
     
     .compact-card { padding: 10px 14px; min-height: auto; flex: 1 1 120px; max-width: 200px; }
-    .compact-card i { font-size: 28px !important; margin-bottom: 5px; }
+    .compact-card i.main-icon { font-size: 28px !important; margin-bottom: 5px; }
     .compact-card div { font-size: 13px; font-weight: 600; }
     
     .link-card {
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: 16px; 
       background: var(--card-bg); 
       border: 1px solid var(--card-border);
       border-radius: 14px; 
       color: var(--text-color); 
       backdrop-filter: blur(10px); 
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 15px; font-weight: 600;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08); 
       position: relative; 
       min-height: 100px; 
       cursor: pointer;
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .link-card i { 
-      font-size: 32px; 
-      margin-bottom: 8px; 
-      color: var(--icon-color); 
-      transition: transform 0.2s ease;
+    .link-card i.main-icon { 
+      font-size: 32px; margin-bottom: 8px; color: var(--icon-color); transition: transform 0.2s ease;
     }
     .link-card:hover { 
-      transform: translateY(-4px); 
-      background: var(--card-hover);
+      transform: translateY(-4px); background: var(--card-hover);
       box-shadow: 0 12px 20px rgba(2, 132, 199, 0.2);
     }
-    .link-card:hover i {
-      transform: scale(1.1);
+    .link-card:hover i.main-icon { transform: scale(1.1); }
+
+    /* Network Ping Status Badge & Icon Styling */
+    .status-badge {
+      position: absolute; top: 8px; right: 8px;
+      font-size: 11px; padding: 2px 6px; border-radius: 10px;
+      font-weight: bold; display: flex; align-items: center; gap: 4px;
     }
+    .status-badge.online { background: rgba(76, 175, 80, 0.2); color: #4CAF50; border: 1px solid #4CAF50; }
+    .status-badge.offline { background: rgba(244, 67, 54, 0.2); color: #f44336; border: 1px solid #f44336; }
+    .status-badge.checking { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid #ffc107; }
 
     .user-login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); display: flex; justify-content: center; align-items: center; z-index: 999; }
     .modal-content { background: var(--modal-bg); color: var(--text-color); padding: 24px; border-radius: 14px; width: 320px; border: 1px solid var(--modal-border); text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); }
@@ -379,24 +336,34 @@
       govc.innerHTML = ''; 
       educ.innerHTML = '';
       
+      let cardIdIndex = 0;
+
+      // Render FTP Links with Network Status
       ftpLinks.concat(ftp2Links, ftp3Links, ftp4Links).forEach((l) => { 
-        ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp', true); 
+        cardIdIndex++;
+        ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp', true, `card-${cardIdIndex}`);
+        checkServerPing(l.url, `card-${cardIdIndex}`);
       });
 
+      // Render Live TV Links with Network Status
       tvLinks.concat(tv2Links, tv3Links, tv4Links).forEach((l) => { 
-        tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv', true); 
+        cardIdIndex++;
+        tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv', true, `card-${cardIdIndex}`);
+        checkServerPing(l.url, `card-${cardIdIndex}`);
       });
 
+      // Render Government Links
       govLinks.forEach((l) => { 
         govc.innerHTML += genCard(l.title, l.url, 'gov', false); 
       });
 
+      // Render Education Links
       eduLinks.forEach((l) => { 
         educ.innerHTML += genCard(l.title, l.url, 'edu', false); 
       });
     }
 
-    function genCard(title, url, type, isCompact = false) {
+    function genCard(title, url, type, isCompact = false, id = '') {
       let iconClass = 'fas fa-globe';
       if (type === 'ftp') iconClass = 'fas fa-server';
       if (type === 'tv') iconClass = 'fas fa-tv';
@@ -404,13 +371,44 @@
       if (type === 'edu') iconClass = 'fas fa-graduation-cap';
       
       const compactClass = isCompact ? 'compact-card' : '';
+      const statusBadge = (type === 'ftp' || type === 'tv') 
+        ? `<div class="status-badge checking" id="badge-${id}"><i class="fas fa-circle-notch fa-spin"></i> Testing</div>` 
+        : '';
 
       return `
-        <div class="link-card ${compactClass}" onclick="window.open('${url}', '_blank')">
-          <i class="${iconClass}"></i>
+        <div class="link-card ${compactClass}" id="${id}" onclick="window.open('${url}', '_blank')">
+          ${statusBadge}
+          <i class="${iconClass} main-icon"></i>
           <div>${title}</div>
         </div>
       `;
+    }
+
+    // Network Status Ping Function
+    function checkServerPing(url, cardId) {
+      const badge = document.getElementById(`badge-${cardId}`);
+      if (!badge) return;
+
+      const img = new Image();
+      const timer = setTimeout(() => {
+        badge.className = 'status-badge offline';
+        badge.innerHTML = '<i class="fas fa-wifi"></i> Offline';
+      }, 3500);
+
+      img.onload = function() {
+        clearTimeout(timer);
+        badge.className = 'status-badge online';
+        badge.innerHTML = '<i class="fas fa-wifi"></i> Online';
+      };
+
+      img.onerror = function() {
+        clearTimeout(timer);
+        // Local network assets like FTP may trigger error due to CORS, but if reached, they are Online
+        badge.className = 'status-badge online';
+        badge.innerHTML = '<i class="fas fa-wifi"></i> Online';
+      };
+
+      img.src = url + 'favicon.ico?' + new Date().getTime();
     }
   </script>
 </body>
