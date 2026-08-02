@@ -6,46 +6,121 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
+    /* CSS Variables for Themes */
+    :root {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --card-hover: rgba(255, 255, 255, 0.18);
+      --modal-bg: #1e1e1e;
+      --modal-border: #333;
+      --input-bg: #2a2a2a;
+      --input-border: #444;
+      --footer-bg: rgba(0, 0, 0, 0.4);
+      --icon-color: #00e676;
+    }
+
+    [data-theme="light"] {
+      --bg-color: #f4f6f9;
+      --text-color: #1a1a1a;
+      --card-bg: #ffffff;
+      --card-border: rgba(0, 0, 0, 0.1);
+      --card-hover: #eef2f5;
+      --modal-bg: #ffffff;
+      --modal-border: #ddd;
+      --input-bg: #f0f0f0;
+      --input-border: #ccc;
+      --footer-bg: rgba(0, 0, 0, 0.05);
+      --icon-color: #2e7d32;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { min-height: 100%; font-family: 'Segoe UI', sans-serif; }
     body {
       margin: 0; padding: 0;
-      background: #121212;
-      color: #f0f0f0;
+      background: var(--bg-color);
+      color: var(--text-color);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      transition: background 0.3s ease, color 0.3s ease;
     }
+
     #particles-js { position: fixed; width: 100%; height: 100%; z-index: 0; }
+    
+    /* Theme Switcher Button */
+    .theme-toggle-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1001;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-color);
+      padding: 10px 14px;
+      border-radius: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    .theme-toggle-btn:hover {
+      background: var(--card-hover);
+    }
+
     .dashboard { position: relative; z-index: 1; padding: 30px 15px 10px; text-align: center; }
-    .main-header { font-size: 32px; font-weight: bold; margin-bottom: 25px; }
+    .main-header { font-size: 32px; font-weight: bold; margin-bottom: 25px; margin-top: 10px; }
     .section-title { font-size: 22px; margin: 25px 0 15px; display: flex; justify-content: center; align-items: center; gap: 10px; }
     .link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; max-width: 950px; margin: 0 auto; }
     .inline-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 12px; max-width: 950px; margin: 0 auto 20px auto; }
+    
     .compact-card { padding: 10px 14px; min-height: auto; flex: 1 1 120px; max-width: 200px; }
     .compact-card i { font-size: 28px !important; margin-bottom: 5px; }
     .compact-card div { font-size: 13px; font-weight: 600; }
+    
     .link-card {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px; color: #fff; backdrop-filter: blur(6px); font-size: 15px;
-      box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4); position: relative; min-height: 100px; cursor: pointer;
+      padding: 16px; 
+      background: var(--card-bg); 
+      border: 1px solid var(--card-border);
+      border-radius: 12px; 
+      color: var(--text-color); 
+      backdrop-filter: blur(6px); 
+      font-size: 15px;
+      box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15); 
+      position: relative; 
+      min-height: 100px; 
+      cursor: pointer;
       transition: all 0.2s ease-in-out;
     }
-    .link-card i { font-size: 32px; margin-bottom: 8px; }
-    .link-card:hover { transform: translateY(-3px); background: rgba(255, 255, 255, 0.18); }
+    .link-card i { font-size: 32px; margin-bottom: 8px; color: var(--text-color); }
+    .link-card:hover { transform: translateY(-3px); background: var(--card-hover); }
+
     .user-login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 999; }
-    .modal-content { background: #1e1e1e; color: #fff; padding: 20px; border-radius: 10px; width: 320px; border: 1px solid #333; text-align: center; }
-    .modal-content input { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #444; background: #2a2a2a; color: #fff; border-radius: 4px; }
+    .modal-content { background: var(--modal-bg); color: var(--text-color); padding: 20px; border-radius: 10px; width: 320px; border: 1px solid var(--modal-border); text-align: center; }
+    .modal-content input { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text-color); border-radius: 4px; }
     .modal-content button { padding: 10px 16px; margin-top: 5px; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; background: #4CAF50; color: white; width: 100%; }
-    .logout-btn { position: fixed; right: 20px; bottom: 20px; padding: 10px 16px; border-radius: 20px; border: none; background: #e91e63; color: white; font-size: 14px; font-weight: bold; cursor: pointer; z-index: 1000; }
-    .developer-footer { position: relative; z-index: 1; text-align: center; padding: 15px 10px; font-size: 14px; background: rgba(0, 0, 0, 0.4); margin-top: 30px; }
-    .developer-footer span { font-weight: bold; color: #00e676; }
+    
+    .logout-btn { position: fixed; left: 20px; bottom: 20px; padding: 10px 16px; border-radius: 20px; border: none; background: #e91e63; color: white; font-size: 14px; font-weight: bold; cursor: pointer; z-index: 1000; }
+    
+    .developer-footer { position: relative; z-index: 1; text-align: center; padding: 15px 10px; font-size: 14px; background: var(--footer-bg); margin-top: 30px; }
+    .developer-footer span { font-weight: bold; color: var(--icon-color); }
   </style>
 </head>
 <body>
   <div id="particles-js"></div>
-  
+
+  <!-- Mode Switcher Button -->
+  <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
+    <i class="fas fa-moon" id="themeIcon"></i>
+    <span id="themeText">Dark</span>
+  </button>
+
   <!-- User Access Modal -->
   <div class="user-login-modal" id="userLoginModal">
     <div class="modal-content" id="loginBox">
@@ -88,6 +163,36 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <script>
+    // Theme Management Script
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeUI(savedTheme);
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeUI(newTheme);
+    }
+
+    function updateThemeUI(theme) {
+      const icon = document.getElementById('themeIcon');
+      const text = document.getElementById('themeText');
+      if (theme === 'light') {
+        icon.className = 'fas fa-sun';
+        text.innerText = 'Light';
+      } else {
+        icon.className = 'fas fa-moon';
+        text.innerText = 'Dark';
+      }
+    }
+
+    initTheme();
+
+    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDB4r_a5gPtKhlzM0qqmYHBb6HA_I2SmHQ",
       authDomain: "eser-all.firebaseapp.com",
@@ -156,7 +261,7 @@
         particlesJS('particles-js', {
           particles: {
             number: { value: 50 },
-            color: { value: '#ffffff' },
+            color: { value: '#888888' },
             shape: { type: 'circle' },
             opacity: { value: 0.3 },
             size: { value: 3 },
@@ -198,22 +303,18 @@
       govc.innerHTML = ''; 
       educ.innerHTML = '';
       
-      // Render FTP Links
       ftpLinks.concat(ftp2Links, ftp3Links, ftp4Links).forEach((l) => { 
         ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp', true); 
       });
 
-      // Render Live TV Links
       tvLinks.concat(tv2Links, tv3Links, tv4Links).forEach((l) => { 
         tvAllContainer.innerHTML += genCard(l.title, l.url, 'tv', true); 
       });
 
-      // Render Government Links
       govLinks.forEach((l) => { 
         govc.innerHTML += genCard(l.title, l.url, 'gov', false); 
       });
 
-      // Render Education Links
       eduLinks.forEach((l) => { 
         educ.innerHTML += genCard(l.title, l.url, 'edu', false); 
       });
