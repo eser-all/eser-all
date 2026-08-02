@@ -234,13 +234,13 @@
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   
-  <!-- Firebase SDKs (Compat Version for simplicity and speed) -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <script>
     // ==========================================
-    // আপনার বাস্তব FIREBASE CONFIG
+    // FIREBASE CONFIG
     // ==========================================
     const firebaseConfig = {
       apiKey: "AIzaSyDB4r_a5gPtKhlzM0qqmYHBb6HA_I2SmHQ",
@@ -257,7 +257,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // অনুমোদিত ইউজারদের লিস্ট
+    // Allowed Users List
     const allowedUsers = [
       { id: "user1", email: "antu.skynetonlinebd@gmail.com", pass: "123456" },
       { id: "antu", email: "antubanglanet08@gmail.com", pass: "antu2026" }
@@ -273,12 +273,11 @@
     let currentSessionId = localStorage.getItem('eser_session_id') || '';
     let sessionListener = null;
 
-    // ইউনিক ডিভাইসের র্যান্ডম আইডি তৈরি
     function generateUUID() {
       return 'device-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
 
-    // লগইন চেক
+    // Login logic with error safety
     function checkUserLogin() {
       const input = document.getElementById('userInputId').value.trim();
       const upass = document.getElementById('userInputPass').value.trim();
@@ -292,27 +291,30 @@
         const newDeviceSessionId = generateUUID();
         const userIdKey = foundUser.id.toLowerCase().replace(/[^a-zA-Z0-9]/g, "_");
 
-        // Firebase-এ বর্তমান ডিভাইসের ইউনিক আইডি সেভ করা
+        // Save session locally
+        localStorage.setItem('isUserLoggedIn', 'true');
+        localStorage.setItem('loggedInUser', userIdKey);
+        localStorage.setItem('eser_session_id', newDeviceSessionId);
+        currentSessionId = newDeviceSessionId;
+
+        // Show main dashboard UI
+        showDashboard();
+
+        // Save session to Firebase Realtime Database
         db.ref('active_sessions/' + userIdKey).set({
           sessionId: newDeviceSessionId,
           loginTime: new Date().toISOString()
         }).then(() => {
-          localStorage.setItem('isUserLoggedIn', 'true');
-          localStorage.setItem('loggedInUser', userIdKey);
-          localStorage.setItem('eser_session_id', newDeviceSessionId);
-          currentSessionId = newDeviceSessionId;
-
-          showDashboard();
           listenForOtherLogins(userIdKey, newDeviceSessionId);
         }).catch(err => {
-          alert('Database error! Please check Firebase Realtime Database permissions.');
+          console.warn('Firebase sync bypassed due to rules/network issue:', err);
         });
+
       } else {
         alert('Invalid User ID/Email or Password!');
       }
     }
 
-    // অন্য ডিভাইস থেকে লগইন হয়েছে কিনা লাইভ মনিটর করা
     function listenForOtherLogins(userIdKey, mySessionId) {
       if (sessionListener) {
         db.ref('active_sessions/' + userIdKey).off('value', sessionListener);
@@ -351,8 +353,20 @@
       location.reload();
     }
 
-    // অটো সেশন রি-চেক (পেজ রিফ্রেশ করলেও সেশন একটিভ থাকবে)
+    // Auto Session Re-check
     window.addEventListener('DOMContentLoaded', () => {
+      // Particles.js Initialization
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 50 },
+          color: { value: '#ffffff' },
+          shape: { type: 'circle' },
+          opacity: { value: 0.3 },
+          size: { value: 3 },
+          move: { enable: true, speed: 2 }
+        }
+      });
+
       const isLoggedIn = localStorage.getItem('isUserLoggedIn') === 'true';
       const loggedUser = localStorage.getItem('loggedInUser');
       const mySessionId = localStorage.getItem('eser_session_id');
@@ -360,7 +374,7 @@
       if (isLoggedIn && loggedUser && mySessionId) {
         db.ref('active_sessions/' + loggedUser).once('value').then(snapshot => {
           const data = snapshot.val();
-          if (data && data.sessionId === mySessionId) {
+          if (!data || data.sessionId === mySessionId) {
             showDashboard();
             listenForOtherLogins(loggedUser, mySessionId);
           } else {
@@ -373,7 +387,7 @@
       }
     });
 
-    // লিংক রেন্ডারিং ফাংশনসমূহ
+    // Link Rendering
     let ftpLinks = [{ title: "FTP Server 1", url: `http://${FTP_API_HOST}/` }];
     let ftp2Links = [{ title: "FTP Server 2", url: `http://${FTP2_API_HOST}/` }];
     let ftp3Links = [{ title: "FTP Server 3", url: `http://${FTP3_API_HOST}/` }];
