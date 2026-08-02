@@ -128,19 +128,6 @@
       width: 100%;
       height: 100%;
     }
-    .edit-btn {
-      position: absolute;
-      top: 4px;
-      right: 6px;
-      background: #fff;
-      color: #000;
-      border-radius: 50%;
-      padding: 2px 6px;
-      font-size: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 10;
-    }
     .modal, .login-modal, .user-login-modal {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -177,29 +164,6 @@
       font-weight: bold;
     }
     .modal-content button.btn-primary { background: #4CAF50; color: white; width: 100%; }
-    .auth-toggle-link {
-      margin-top: 15px;
-      font-size: 13px;
-      color: #00e676;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-    #btnCancelLogin { background: #444; color: #fff; }
-    .theme-toggle {
-      position: fixed;
-      left: 20px; bottom: 20px;
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      border: 2px solid white;
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 1000;
-    }
     .logout-btn {
       position: fixed;
       right: 20px; bottom: 20px;
@@ -231,23 +195,11 @@
   
   <!-- User Access Modal -->
   <div class="user-login-modal" id="userLoginModal">
-    <!-- Login Form -->
     <div class="modal-content" id="loginBox">
       <h3 style="margin-bottom: 15px;"><i class="fas fa-lock"></i> User Access Login</h3>
       <input type="text" id="userInputId" placeholder="User ID or Email">
       <input type="password" id="userInputPass" placeholder="Password">
       <button class="btn-primary" onclick="checkUserLogin()">Login</button>
-      <div class="auth-toggle-link" onclick="toggleAuthMode('signup')">Don't have an ID? Create One</div>
-    </div>
-
-    <!-- Sign Up Form (With Email Field) -->
-    <div class="modal-content" id="signupBox" style="display: none;">
-      <h3 style="margin-bottom: 15px;"><i class="fas fa-user-plus"></i> Create New User</h3>
-      <input type="text" id="newUserId" placeholder="Choose User ID">
-      <input type="email" id="newUserEmail" placeholder="Enter Email ID">
-      <input type="password" id="newUserPass" placeholder="Choose Password">
-      <button class="btn-primary" style="background: #2196F3;" onclick="createNewUser()">Create Account</button>
-      <div class="auth-toggle-link" onclick="toggleAuthMode('login')">Already have an ID? Login</div>
     </div>
   </div>
 
@@ -269,15 +221,6 @@
     <!-- Education & Admissions -->
     <div class="section-title"><i class="fas fa-graduation-cap"></i> University Admissions & Board Results (শিক্ষা ও ভর্তি সেবা)</div>
     <div class="link-grid" id="edu-section"></div>
-    
-    <div class="dashboard-controls" id="adminControls" style="display: none; margin-top: 20px;">
-      <button id="btnToggleEdit" onclick="toggleEditIcons()" style="padding: 8px 16px; font-weight: bold; cursor: pointer; border-radius: 4px; border: none; background: #fff; color: #000;">Show Edit</button>
-    </div>
-  </div>
-
-  <!-- Theme Toggle Button -->
-  <div class="theme-toggle" onclick="toggleTheme()">
-    <i class="fas fa-moon" id="themeIcon"></i>
   </div>
 
   <!-- Logout Button -->
@@ -289,29 +232,37 @@
     Developed by <span>Antu</span>
   </footer>
 
-  <!-- Edit Modal -->
-  <div class="modal" id="editModal" style="display: none;">
-    <div class="modal-content">
-      <h3 style="margin-bottom: 15px;">Edit Link</h3>
-      <input type="text" id="editTitle" placeholder="Name">
-      <input type="text" id="editURL" placeholder="URL">
-      <button onclick="saveEdit()" style="background: #4CAF50; color: white;">Save</button>
-      <button onclick="closeModal()" id="btnCancelEdit" style="background: #555; color: #fff;">Cancel</button>
-    </div>
-  </div>
-
-  <!-- Admin Login Modal -->
-  <div class="login-modal" id="loginModal" style="display: none;">
-    <div class="modal-content">
-      <h3 style="margin-bottom: 15px;">Admin Login</h3>
-      <input type="password" id="adminPass" placeholder="Enter Admin Password">
-      <button onclick="checkLogin()" style="background: #4CAF50; color: white;">Login</button>
-      <button id="btnCancelLogin">Cancel</button>
-    </div>
-  </div>
-
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  
+  <!-- Firebase SDKs (Compat Version for simplicity and speed) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <script>
+    // ==========================================
+    // আপনার বাস্তব FIREBASE CONFIG
+    // ==========================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyDB4r_a5gPtKhlzM0qqmYHBb6HA_I2SmHQ",
+      authDomain: "eser-all.firebaseapp.com",
+      databaseURL: "https://eser-all-default-rtdb.firebaseio.com",
+      projectId: "eser-all",
+      storageBucket: "eser-all.firebasestorage.app",
+      messagingSenderId: "741870576674",
+      appId: "1:741870576674:web:2a5094bd05f44f0b98d67b",
+      measurementId: "G-CQLKEKLC6K"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // অনুমোদিত ইউজারদের লিস্ট
+    const allowedUsers = [
+      { id: "user1", email: "user1@gmail.com", pass: "1234" },
+      { id: "antu", email: "antu@gmail.com", pass: "antu2026" }
+    ];
+
     const FTP_API_HOST = '10.10.10.10';
     const FTP2_API_HOST = '172.16.50.4'; 
     const FTP3_API_HOST = '172.19.178.179';
@@ -319,82 +270,110 @@
     const TV_API_HOST = '172.28.28.54';
     const TV2_API_HOST = '172.19.178.180';
 
-    // ডিফল্ট ইউজার তালিকা (Email সহ)
-    const defaultUsers = [
-      { id: "user1", email: "user1@gmail.com", pass: "1234" },
-      { id: "antu", email: "antu@gmail.com", pass: "antu2026" }
-    ];
+    let currentSessionId = localStorage.getItem('eser_session_id') || '';
+    let sessionListener = null;
 
-    // LocalStorage থেকে ডাটা নেওয়া
-    function getUsers() {
-      const stored = localStorage.getItem('eser_app_users');
-      if (stored) {
-        return JSON.parse(stored);
+    // ইউনিক ডিভাইসের র্যান্ডম আইডি তৈরি
+    function generateUUID() {
+      return 'device-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
+
+    // লগইন চেক
+    function checkUserLogin() {
+      const input = document.getElementById('userInputId').value.trim();
+      const upass = document.getElementById('userInputPass').value.trim();
+
+      const foundUser = allowedUsers.find(u => 
+        (u.id.toLowerCase() === input.toLowerCase() || (u.email && u.email.toLowerCase() === input.toLowerCase())) && 
+        u.pass === upass
+      );
+
+      if (foundUser) {
+        const newDeviceSessionId = generateUUID();
+        const userIdKey = foundUser.id.toLowerCase().replace(/[^a-zA-Z0-9]/g, "_");
+
+        // Firebase-এ বর্তমান ডিভাইসের ইউনিক আইডি সেভ করা
+        db.ref('active_sessions/' + userIdKey).set({
+          sessionId: newDeviceSessionId,
+          loginTime: new Date().toISOString()
+        }).then(() => {
+          localStorage.setItem('isUserLoggedIn', 'true');
+          localStorage.setItem('loggedInUser', userIdKey);
+          localStorage.setItem('eser_session_id', newDeviceSessionId);
+          currentSessionId = newDeviceSessionId;
+
+          showDashboard();
+          listenForOtherLogins(userIdKey, newDeviceSessionId);
+        }).catch(err => {
+          alert('Database error! Please check Firebase Realtime Database permissions.');
+        });
       } else {
-        localStorage.setItem('eser_app_users', JSON.stringify(defaultUsers));
-        return defaultUsers;
+        alert('Invalid User ID/Email or Password!');
       }
     }
 
-    // Toggle Sign Up and Login Forms
-    function toggleAuthMode(mode) {
-      if (mode === 'signup') {
-        document.getElementById('loginBox').style.display = 'none';
-        document.getElementById('signupBox').style.display = 'block';
-      } else {
-        document.getElementById('signupBox').style.display = 'none';
-        document.getElementById('loginBox').style.display = 'block';
+    // অন্য ডিভাইস থেকে লগইন হয়েছে কিনা লাইভ মনিটর করা
+    function listenForOtherLogins(userIdKey, mySessionId) {
+      if (sessionListener) {
+        db.ref('active_sessions/' + userIdKey).off('value', sessionListener);
       }
+
+      sessionListener = db.ref('active_sessions/' + userIdKey).on('value', snapshot => {
+        const data = snapshot.val();
+        if (data && data.sessionId && data.sessionId !== mySessionId) {
+          alert('You have been logged out because this account was accessed from another device!');
+          userLogout(false);
+        }
+      });
     }
 
-    // Email validation helper
-    function validateEmail(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email);
+    function showDashboard() {
+      document.getElementById('userLoginModal').style.display = 'none';
+      document.getElementById('mainDashboard').style.display = 'block';
+      document.getElementById('btnLogout').style.display = 'block';
+      fetchLinks();
     }
 
-    // New User Registration with Email
-    function createNewUser() {
-      const newId = document.getElementById('newUserId').value.trim();
-      const newEmail = document.getElementById('newUserEmail').value.trim();
-      const newPass = document.getElementById('newUserPass').value.trim();
-
-      if (!newId || !newEmail || !newPass) {
-        alert('Please fill in User ID, Email, and Password!');
-        return;
-      }
-
-      if (!validateEmail(newEmail)) {
-        alert('Please enter a valid Email address!');
-        return;
-      }
-
-      const users = getUsers();
+    function userLogout(clearServer = true) {
+      const loggedUser = localStorage.getItem('loggedInUser');
       
-      // Check User ID duplicate
-      const idExists = users.some(u => u.id.toLowerCase() === newId.toLowerCase());
-      if (idExists) {
-        alert('This User ID is already taken!');
-        return;
+      if (clearServer && loggedUser) {
+        db.ref('active_sessions/' + loggedUser).remove();
       }
 
-      // Check Email duplicate
-      const emailExists = users.some(u => u.email && u.email.toLowerCase() === newEmail.toLowerCase());
-      if (emailExists) {
-        alert('This Email ID is already registered!');
-        return;
+      if (loggedUser && sessionListener) {
+        db.ref('active_sessions/' + loggedUser).off('value', sessionListener);
       }
 
-      users.push({ id: newId, email: newEmail, pass: newPass });
-      localStorage.setItem('eser_app_users', JSON.stringify(users));
-
-      alert('Account created successfully! You can now login.');
-      document.getElementById('newUserId').value = '';
-      document.getElementById('newUserEmail').value = '';
-      document.getElementById('newUserPass').value = '';
-      toggleAuthMode('login');
+      localStorage.removeItem('isUserLoggedIn');
+      localStorage.removeItem('loggedInUser');
+      localStorage.removeItem('eser_session_id');
+      location.reload();
     }
 
+    // অটো সেশন রি-চেক (পেজ রিফ্রেশ করলেও সেশন একটিভ থাকবে)
+    window.addEventListener('DOMContentLoaded', () => {
+      const isLoggedIn = localStorage.getItem('isUserLoggedIn') === 'true';
+      const loggedUser = localStorage.getItem('loggedInUser');
+      const mySessionId = localStorage.getItem('eser_session_id');
+
+      if (isLoggedIn && loggedUser && mySessionId) {
+        db.ref('active_sessions/' + loggedUser).once('value').then(snapshot => {
+          const data = snapshot.val();
+          if (data && data.sessionId === mySessionId) {
+            showDashboard();
+            listenForOtherLogins(loggedUser, mySessionId);
+          } else {
+            alert('Your session has expired or another device logged in.');
+            userLogout(false);
+          }
+        }).catch(() => {
+          showDashboard();
+        });
+      }
+    });
+
+    // লিংক রেন্ডারিং ফাংশনসমূহ
     let ftpLinks = [{ title: "FTP Server 1", url: `http://${FTP_API_HOST}/` }];
     let ftp2Links = [{ title: "FTP Server 2", url: `http://${FTP2_API_HOST}/` }];
     let ftp3Links = [{ title: "FTP Server 3", url: `http://${FTP3_API_HOST}/` }];
@@ -421,52 +400,13 @@
       { title: "জেএসসি/জেডিসি/এসএসসি/দাখিল/এইচএসসি/আলিম ও সমমানের পরীক্ষা", url: "https://www.educationboardresults.gov.bd/v2/home" }
     ];
 
-    let currentEdit = { type: '', index: -1 };
-    let isAdmin = false, showEditIcons = false;
-
-    // Login Check (Allows login via ID or Email)
-    function checkUserLogin() {
-      const input = document.getElementById('userInputId').value.trim();
-      const upass = document.getElementById('userInputPass').value.trim();
-
-      const users = getUsers();
-      const foundUser = users.find(u => 
-        (u.id.toLowerCase() === input.toLowerCase() || (u.email && u.email.toLowerCase() === input.toLowerCase())) && 
-        u.pass === upass
-      );
-
-      if (foundUser) {
-        sessionStorage.setItem('isUserLoggedIn', 'true');
-        sessionStorage.setItem('loggedInUser', foundUser.id);
-        showDashboard();
-      } else {
-        alert('Invalid User ID/Email or Password!');
-      }
-    }
-
-    function showDashboard() {
-      document.getElementById('userLoginModal').style.display = 'none';
-      document.getElementById('mainDashboard').style.display = 'block';
-      document.getElementById('btnLogout').style.display = 'block';
-      fetchLinks();
-    }
-
-    function userLogout() {
-      sessionStorage.removeItem('isUserLoggedIn');
-      sessionStorage.removeItem('loggedInUser');
-      location.reload();
-    }
-
     function renderLinks() {
       const ftpAllContainer = document.getElementById('ftp-all-section');
       const tvAllContainer = document.getElementById('tv-all-section');
       const govc = document.getElementById('gov-section');
       const educ = document.getElementById('edu-section');
       
-      ftpAllContainer.innerHTML = '';
-      tvAllContainer.innerHTML = '';
-      govc.innerHTML = '';
-      educ.innerHTML = '';
+      ftpAllContainer.innerHTML = ''; tvAllContainer.innerHTML = ''; govc.innerHTML = ''; educ.innerHTML = '';
       
       ftpLinks.forEach((l, i) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp', i, true); });
       ftp2Links.forEach((l, i) => { ftpAllContainer.innerHTML += genCard(l.title, l.url, 'ftp2', i, true); });
@@ -507,13 +447,11 @@
             <i class="${iconClass}"></i>
             <div>${title}</div>
           </a>
-          ${isAdmin && showEditIcons ? `<div class="edit-btn" onclick="openModal(event, '${type}', ${idx})">Edit</div>` : ''}
         </div>
       `;
     }
 
     function openTargetUrl(event, url) {
-      if (event.target.classList.contains('edit-btn')) return;
       window.open(url, '_blank');
     }
 
@@ -532,127 +470,13 @@
 
     async function fetchLinks() {
       renderLinks();
-
       await tryFetchAPI(`http://${FTP_API_HOST}/api/links`, data => { if(data.ftp) ftpLinks = data.ftp; });
       await tryFetchAPI(`http://${FTP2_API_HOST}/api/links`, data => { if(data.ftp2) ftp2Links = data.ftp2; });
       await tryFetchAPI(`http://${FTP3_API_HOST}/api/links`, data => { if(data.ftp3) ftp3Links = data.ftp3; });
       await tryFetchAPI(`http://${FTP4_API_HOST}/api/links`, data => { if(data.ftp4) ftp4Links = data.ftp4; });
       await tryFetchAPI(`http://${TV_API_HOST}/api/links`, data => { if(data.tv) tvLinks = data.tv; });
       await tryFetchAPI(`http://${TV2_API_HOST}/api/links`, data => { if(data.tv2) tv2Links = data.tv2; });
-
-      renderLinks();
     }
-
-    function openModal(event, type, index) {
-      event.stopPropagation();
-      currentEdit = { type, index };
-      let data;
-      if (type === 'ftp') data = ftpLinks[index];
-      else if (type === 'ftp2') data = ftp2Links[index];
-      else if (type === 'ftp3') data = ftp3Links[index];
-      else if (type === 'ftp4') data = ftp4Links[index];
-      else if (type === 'tv') data = tvLinks[index];
-      else if (type === 'tv2') data = tv2Links[index];
-      else if (type === 'tv3') data = tv3Links[index];
-      else if (type === 'tv4') data = tv4Links[index];
-      else if (type === 'gov') data = govLinks[index];
-      else if (type === 'edu') data = eduLinks[index];
-
-      if (data) {
-        document.getElementById('editTitle').value = data.title || '';
-        document.getElementById('editURL').value = data.url || '';
-        document.getElementById('editModal').style.display = 'flex';
-      }
-    }
-
-    function closeModal() {
-      document.getElementById('editModal').style.display = 'none';
-    }
-
-    async function saveEdit() {
-      const nt = document.getElementById('editTitle').value.trim();
-      const nu = document.getElementById('editURL').value.trim();
-      if (!nt || !nu) return alert('Fill all fields!');
-
-      let targetHost = FTP_API_HOST;
-      if (currentEdit.type === 'ftp') ftpLinks[currentEdit.index] = { title: nt, url: nu };
-      else if (currentEdit.type === 'ftp2') { ftp2Links[currentEdit.index] = { title: nt, url: nu }; targetHost = FTP2_API_HOST; }
-      else if (currentEdit.type === 'ftp3') { ftp3Links[currentEdit.index] = { title: nt, url: nu }; targetHost = FTP3_API_HOST; }
-      else if (currentEdit.type === 'ftp4') { ftp4Links[currentEdit.index] = { title: nt, url: nu }; targetHost = FTP4_API_HOST; }
-      else if (currentEdit.type === 'tv') { tvLinks[currentEdit.index] = { title: nt, url: nu }; targetHost = TV_API_HOST; }
-      else if (currentEdit.type === 'tv2') { tv2Links[currentEdit.index] = { title: nt, url: nu }; targetHost = TV2_API_HOST; }
-      else if (currentEdit.type === 'tv3') { tv3Links[currentEdit.index] = { title: nt, url: nu }; }
-      else if (currentEdit.type === 'tv4') { tv4Links[currentEdit.index] = { title: nt, url: nu }; }
-      else if (currentEdit.type === 'gov') { govLinks[currentEdit.index] = { title: nt, url: nu }; }
-      else if (currentEdit.type === 'edu') { eduLinks[currentEdit.index] = { title: nt, url: nu }; }
-
-      try {
-        await fetch(`http://${targetHost}/api/links`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ftp: ftpLinks, ftp2: ftp2Links, ftp3: ftp3Links, ftp4: ftp4Links, tv: tvLinks, tv2: tv2Links, tv3: tv3Links, tv4: tv4Links, gov: govLinks, edu: eduLinks })
-        });
-      } catch (err) {}
-      
-      closeModal();
-      renderLinks();
-    }
-
-    function checkLogin() {
-      if (document.getElementById('adminPass').value === 'admin123') {
-        isAdmin = true;
-        document.getElementById('loginModal').style.display = 'none';
-        document.getElementById('adminControls').style.display = 'block';
-        document.getElementById('adminPass').value = '';
-        renderLinks();
-      } else { alert('Wrong password!'); }
-    }
-
-    function toggleEditIcons() {
-      showEditIcons = !showEditIcons;
-      document.getElementById('btnToggleEdit').textContent = showEditIcons ? 'Hide Edit' : 'Show Edit';
-      renderLinks();
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
-      const themeIcon = document.getElementById('themeIcon');
-      themeIcon.classList.toggle('fa-moon');
-      themeIcon.classList.toggle('fa-sun');
-    }
-
-    document.addEventListener('keydown', e => {
-      if (e.shiftKey && e.key.toLowerCase() === 'a') {
-        document.getElementById('loginModal').style.display = 'flex';
-      }
-    });
-
-    document.getElementById('btnCancelLogin').addEventListener('click', () => {
-      document.getElementById('loginModal').style.display = 'none';
-    });
-
-    window.onload = function() {
-      getUsers();
-      if (sessionStorage.getItem('isUserLoggedIn') === 'true') {
-        showDashboard();
-      } else {
-        document.getElementById('userLoginModal').style.display = 'flex';
-      }
-    };
-
-    particlesJS('particles-js', {
-      particles: {
-        number: { value: 100, density: { enable: true, value_area: 800 } },
-        color: { value: '#ffffff' },
-        shape: { type: 'circle' },
-        opacity: { value: 0.5, random: true },
-        size: { value: 3, random: true },
-        line_linked: { enable: true, distance: 100, color: '#ffffff', opacity: 0.4, width: 1.2 },
-        move: { enable: true, speed: 1.5 }
-      },
-      interactivity: { events: { onhover: { enable: true, mode: 'grab' } } },
-      retina_detect: true
-    });
   </script>
 </body>
 </html>
