@@ -5,6 +5,20 @@
   <title>ESER-ALL Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- EmailJS SDK (Latest Version 4) -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+     (function(){
+        // -------------------------------------------------------------
+        // ধাপ ১: নিচে 'YOUR_PUBLIC_KEY' সরিয়ে আপনার আসল EmailJS Public Key বসাবেন
+        // -------------------------------------------------------------
+        emailjs.init({
+          publicKey: "k3Gz4cI70F4UTep3c",
+        });
+     })();
+  </script>
+
   <style>
     :root {
       --bg-color: #0f172a;
@@ -89,7 +103,6 @@
     .section-title { font-size: 22px; margin: 25px 0 15px; display: flex; justify-content: center; align-items: center; gap: 10px; color: var(--text-color); }
     .section-title i { color: var(--icon-color); }
 
-    /* Centered Flex Container for all sections */
     .link-container { 
       display: flex; 
       justify-content: center; 
@@ -100,7 +113,6 @@
       margin: 0 auto 20px auto; 
     }
     
-    /* Uniform Card Style */
     .link-card {
       display: flex; 
       flex-direction: column; 
@@ -131,7 +143,6 @@
       flex-shrink: 0;
     }
 
-    /* Text Auto-fit & Containment Fix */
     .link-card .card-title {
       width: 100%;
       display: -webkit-box;
@@ -153,7 +164,6 @@
       transform: scale(1.1); 
     }
 
-    /* Ping & Network Status Badges */
     .status-badge {
       position: absolute; 
       top: 6px; 
@@ -170,24 +180,61 @@
     .status-badge.offline { background: rgba(244, 67, 54, 0.25); color: #f44336; border: 1px solid #f44336; }
     .status-badge.checking { background: rgba(255, 193, 7, 0.25); color: #ffc107; border: 1px solid #ffc107; }
 
-    .user-login-modal { 
+    /* Modals (Login & Email) */
+    .user-login-modal, .email-modal { 
       position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-      background: rgba(15, 23, 42, 0.95); display: flex; justify-content: center; 
-      align-items: center; z-index: 999; 
+      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(6px);
+      display: flex; justify-content: center; align-items: center; z-index: 1002; 
     }
+    
     .modal-content { 
       background: var(--modal-bg); color: var(--text-color); padding: 28px; 
-      border-radius: 16px; width: 330px; border: 1px solid var(--modal-border); 
-      text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); 
+      border-radius: 16px; width: 340px; border: 1px solid var(--modal-border); 
+      text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4); 
+      position: relative;
     }
-    .modal-content input { 
+    
+    .modal-content input, .modal-content textarea { 
       width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid var(--input-border); 
       background: var(--input-bg); color: var(--text-color); border-radius: 8px; outline: none; 
+      font-family: inherit; font-size: 13px;
     }
+    
+    .modal-content textarea {
+      resize: vertical; min-height: 90px;
+    }
+
     .modal-content button { 
       padding: 12px; margin-top: 5px; cursor: pointer; border: none; 
       border-radius: 8px; font-weight: bold; background: #0284c7; color: white; width: 100%; 
+      transition: background 0.2s ease;
     }
+
+    .modal-content button:hover { background: #0369a1; }
+
+    .close-btn {
+      position: absolute; top: 12px; right: 15px; font-size: 18px; 
+      color: var(--text-color); cursor: pointer; opacity: 0.7; transition: opacity 0.2s;
+    }
+    .close-btn:hover { opacity: 1; }
+
+    /* Divider & Google Login Style */
+    .divider {
+      display: flex; align-items: center; text-align: center;
+      margin: 15px 0; color: #94a3b8; font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; border-bottom: 1px solid var(--modal-border);
+    }
+    .divider:not(:empty)::before { margin-right: .5em; }
+    .divider:not(:empty)::after { margin-left: .5em; }
+
+    .google-btn {
+      background: #ffffff !important; color: #333333 !important;
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; border: 1px solid #cbd5e1 !important; transition: background 0.2s ease;
+    }
+    .google-btn:hover { background: #f1f5f9 !important; }
 
     .logout-btn { 
       position: fixed; left: 20px; bottom: 20px; padding: 10px 18px; border-radius: 20px; 
@@ -224,7 +271,32 @@
       <input type="email" id="userInputEmail" placeholder="Email Address" autocomplete="off">
       <input type="password" id="userInputPass" placeholder="Password" autocomplete="off">
       <button onclick="checkUserLogin()">Login</button>
+      
+      <div class="divider">OR</div>
+      
+      <!-- Google Login Button -->
+      <button class="google-btn" onclick="checkGoogleLogin()">
+        <i class="fab fa-google" style="color: #ea4335; font-size: 16px;"></i> Sign in with Google
+      </button>
+
       <div id="loginError" style="color: #f44336; font-size: 12px; margin-top: 10px; display: none;"></div>
+    </div>
+  </div>
+
+  <!-- Email Modal Form -->
+  <div class="email-modal" id="emailModal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeEmailModal()"><i class="fas fa-times"></i></span>
+      <h3 style="margin-bottom: 15px;"><i class="fas fa-envelope" style="color: var(--icon-color);"></i> Send Email</h3>
+      
+      <form id="emailForm" onsubmit="sendEmail(event)">
+        <input type="email" id="senderEmail" placeholder="Your Email Address" required>
+        <input type="text" id="emailSubject" placeholder="Subject" required>
+        <textarea id="emailMessage" placeholder="Type your message here..." required></textarea>
+        <button type="submit" id="sendBtn"><i class="fas fa-paper-plane"></i> Send Mail</button>
+      </form>
+      
+      <div id="emailStatus" style="font-size: 12px; margin-top: 12px; display: none;"></div>
     </div>
   </div>
 
@@ -246,6 +318,9 @@
 
     <div class="section-title"><i class="fas fa-ticket-alt"></i> Online Ticket</div>
     <div class="link-container" id="ticket-section"></div>
+
+    <div class="section-title"><i class="fas fa-envelope"></i> যোগাযোগ (Contact Us)</div>
+    <div class="link-container" id="contact-section"></div>
   </div>
 
   <button class="logout-btn" id="btnLogout" style="display: none;" onclick="userLogout()">
@@ -302,14 +377,13 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // =============== LINK ARRAYS ===============
-
+    // LINK ARRAYS
     let ftpLinks = [
       { id: "ftp1", title: "Sam FTP", url: "http://172.16.50.4/" },
       { id: "ftp2", title: "Crazy HD", url: "http://crazyhd.com/" },
       { id: "ftp3", title: "Ctg Movies", url: "https://ctgmovies.com/" },
-      { id: "ftp3", title: "Ghuri FTP", url: "http://103.96.104.6//" },
-      { id: "ftp4", title: "ICC FTP", url: "http://10.16.100.244/dashboard.php?session=c2c3e6c0aa01b1c155cec1fbab1bc6c47883390af1b4cb470ee461ff53665061/" }
+      { id: "ftp4", title: "Ghuri FTP", url: "http://103.96.104.6//" },
+      { id: "ftp5", title: "ICC FTP", url: "http://10.16.100.244/dashboard.php?session=c2c3e6c0aa01b1c155cec1fbab1bc6c47883390af1b4cb470ee461ff53665061/" }
     ];
 
     let tvLinks = [
@@ -336,6 +410,10 @@
       { title: "Biman Ticket", url: "https://gozayaan.com/" }
     ];
 
+    let contactLinks = [
+      { title: "Send Email", action: "openEmailModal", type: "emailModal" }
+    ];
+
     // Firebase Auth Login
     function checkUserLogin() {
       const email = document.getElementById("userInputEmail").value.trim();
@@ -355,6 +433,21 @@
         })
         .catch((error) => {
           err.innerText = "Invalid Login Credentials!";
+          err.style.display = "block";
+        });
+    }
+
+    function checkGoogleLogin() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      const err = document.getElementById("loginError");
+
+      auth.signInWithPopup(provider)
+        .then(() => {
+          err.style.display = "none";
+          showDashboard();
+        })
+        .catch((error) => {
+          err.innerText = error.message || "Google Sign-In failed!";
           err.style.display = "block";
         });
     }
@@ -389,35 +482,24 @@
       const govSec = document.getElementById("gov-section");
       const eduSec = document.getElementById("edu-section");
       const ticketSec = document.getElementById("ticket-section");
+      const contactSec = document.getElementById("contact-section");
 
       if(ftpSec) ftpSec.innerHTML = "";
       if(tvSec) tvSec.innerHTML = "";
       if(govSec) govSec.innerHTML = "";
       if(eduSec) eduSec.innerHTML = "";
       if(ticketSec) ticketSec.innerHTML = "";
+      if(contactSec) contactSec.innerHTML = "";
 
-      ftpLinks.forEach(item => {
-        if(ftpSec) ftpSec.innerHTML += genCard(item.title, item.url, "ftp", item.id);
-      });
-
-      tvLinks.forEach(item => {
-        if(tvSec) tvSec.innerHTML += genCard(item.title, item.url, "tv", item.id);
-      });
-
-      govLinks.forEach(item => {
-        if(govSec) govSec.innerHTML += genCard(item.title, item.url, "gov");
-      });
-
-      eduLinks.forEach(item => {
-        if(eduSec) eduSec.innerHTML += genCard(item.title, item.url, "edu");
-      });
-
-      ticketLinks.forEach(item => {
-        if(ticketSec) ticketSec.innerHTML += genCard(item.title, item.url, "ticket");
-      });
+      ftpLinks.forEach(item => { if(ftpSec) ftpSec.innerHTML += genCard(item.title, item.url, "ftp", item.id); });
+      tvLinks.forEach(item => { if(tvSec) tvSec.innerHTML += genCard(item.title, item.url, "tv", item.id); });
+      govLinks.forEach(item => { if(govSec) govSec.innerHTML += genCard(item.title, item.url, "gov"); });
+      eduLinks.forEach(item => { if(eduSec) eduSec.innerHTML += genCard(item.title, item.url, "edu"); });
+      ticketLinks.forEach(item => { if(ticketSec) ticketSec.innerHTML += genCard(item.title, item.url, "ticket"); });
+      contactLinks.forEach(item => { if(contactSec) contactSec.innerHTML += genCard(item.title, item.action, "contact", null, item.type); });
     }
 
-    function genCard(title, url, category, id = null) {
+    function genCard(title, target, category, id = null, type = "url") {
       let iconClass = "fas fa-globe";
       
       if (category === "ftp") iconClass = "fas fa-server";
@@ -429,14 +511,20 @@
         else if (title.toLowerCase().includes("biman")) iconClass = "fas fa-plane";
         else iconClass = "fas fa-ticket-alt";
       }
+      if (category === "contact") iconClass = "fas fa-paper-plane";
 
       let badgeHTML = "";
       if (id) {
         badgeHTML = `<div class="status-badge checking" id="status-${id}"><i class="fas fa-spinner fa-spin"></i></div>`;
       }
 
+      let onClickAction = `window.open('${target}', '_blank')`;
+      if (type === "emailModal") {
+        onClickAction = `${target}()`;
+      }
+
       return `
-        <div class="link-card" onclick="window.open('${url}', '_blank')">
+        <div class="link-card" onclick="${onClickAction}">
           ${badgeHTML}
           <i class="${iconClass} main-icon"></i>
           <div class="card-title">${title}</div>
@@ -468,6 +556,60 @@
     function checkAllNetworkStatuses() {
       ftpLinks.forEach(item => checkNetworkStatus(item.url, item.id));
       tvLinks.forEach(item => checkNetworkStatus(item.url, item.id));
+    }
+
+    // Email Modal Controls
+    function openEmailModal() {
+      document.getElementById("emailModal").style.display = "flex";
+      document.getElementById("emailStatus").style.display = "none";
+      document.getElementById("emailForm").reset();
+    }
+
+    function closeEmailModal() {
+      document.getElementById("emailModal").style.display = "none";
+    }
+
+    // EmailJS Send Function
+    function sendEmail(event) {
+      event.preventDefault();
+
+      const btn = document.getElementById("sendBtn");
+      const status = document.getElementById("emailStatus");
+      
+      const senderEmail = document.getElementById("senderEmail").value;
+      const subject = document.getElementById("emailSubject").value;
+      const message = document.getElementById("emailMessage").value;
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
+
+      const templateParams = {
+        from_email: senderEmail,
+        subject: subject,
+        message: message
+      };
+
+      // -------------------------------------------------------------
+      // ধাপ ২: নিচে 'YOUR_SERVICE_ID' এবং 'YOUR_TEMPLATE_ID' বসাবেন
+      // -------------------------------------------------------------
+      emailjs.send("service_oyptt6l", "template_qvj0msk", templateParams)
+        .then(function(response) {
+          status.style.color = "#4CAF50";
+          status.innerText = "Email sent successfully!";
+          status.style.display = "block";
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fas fa-paper-plane"></i> Send Mail`;
+          setTimeout(() => {
+            closeEmailModal();
+          }, 2000);
+        }, function(error) {
+          console.error("EmailJS Error:", error);
+          status.style.color = "#f44336";
+          status.innerText = "Failed: " + (error.text || "Check EmailJS Config");
+          status.style.display = "block";
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fas fa-paper-plane"></i> Send Mail`;
+        });
     }
   </script>
 </body>
