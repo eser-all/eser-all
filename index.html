@@ -10,10 +10,7 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
      (function(){
-        // -------------------------------------------------------------
-        // ধাপ ১: নিচে 'YOUR_PUBLIC_KEY' সরিয়ে আপনার আসল EmailJS Public Key বসাবেন
-        // -------------------------------------------------------------
-        emailjs.init({
+      emailjs.init({
           publicKey: "k3Gz4cI70F4UTep3c",
         });
      })();
@@ -48,6 +45,7 @@
       --footer-bg: rgba(224, 242, 254, 0.85);
       --icon-color: #0284c7;
       --bg-overlay: rgba(224, 242, 254, 0.45);
+      animation: gradientBG 15s ease infinite;
     }
 
     [data-theme="light"] body {
@@ -396,7 +394,9 @@
     let govLinks = [
       { title: "NID / ভোটার আবেদন", url: "http://services.nidw.gov.bd" },
       { title: "জন্ম নিবন্ধন ও সংশোধন", url: "http://bdris.gov.bd" },
-      { title: "পাসপোর্টের আবেদন", url: "http://epassport.gov.bd" }
+      { title: "পাসপোর্টের আবেদন", url: "http://epassport.gov.bd" },
+      { title: "টিন (e-TIN) সার্টিফিকেট", url: "http://incometax.gov.bd" },
+      { title: "পুলিশ ক্লিয়ারেন্স আবেদন", url: "http://pcc.police.gov.bd" }
     ];
 
     let eduLinks = [
@@ -588,11 +588,7 @@
         subject: subject,
         message: message
       };
-
-      // -------------------------------------------------------------
-      // ধাপ ২: নিচে 'YOUR_SERVICE_ID' এবং 'YOUR_TEMPLATE_ID' বসাবেন
-      // -------------------------------------------------------------
-      emailjs.send("service_oyptt6l", "template_qvj0msk", templateParams)
+     emailjs.send("service_oyptt6l", "template_qvj0msk", templateParams)
         .then(function(response) {
           status.style.color = "#4CAF50";
           status.innerText = "Email sent successfully!";
