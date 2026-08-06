@@ -35,7 +35,7 @@
       position: relative;
     }
     
-    /* Light Mode Class (Using 1st Code's Animated Gradient) */
+    /* Light Mode Class (Using Animated Gradient) */
     body.light-mode {
       background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
       background-size: 400% 400%;
@@ -557,18 +557,40 @@
       }
     });
 
-    // Particle background initialization
+    // Enhanced Particle background initialization
     particlesJS('particles-js', {
       particles: {
-        number: { value: 100, density: { enable: true, value_area: 800 } },
+        number: { 
+          value: 180, // পার্টিকেলের সংখ্যা বাড়ানো হয়েছে
+          density: { enable: true, value_area: 800 } 
+        },
         color: { value: '#ffffff' },
         shape: { type: 'circle' },
-        opacity: { value: 0.5, random: true },
-        size: { value: 3, random: true },
-        line_linked: { enable: true, distance: 100, color: '#ffffff', opacity: 0.4, width: 1.2 },
-        move: { enable: true, speed: 1.5 }
+        opacity: { 
+          value: 0.8, // নোডের উজ্জ্বলতা বৃদ্ধি
+          random: true 
+        },
+        size: { 
+          value: 4, // পার্টিকেলের সাইজ বাড়ানো হয়েছে
+          random: true 
+        },
+        line_linked: { 
+          enable: true, 
+          distance: 140, // সংযোগ দূরত্ব বাড়ানো হয়েছে
+          color: '#ffffff', 
+          opacity: 0.6, // লাইনের উজ্জ্বলতা বৃদ্ধি
+          width: 1.5 
+        },
+        move: { 
+          enable: true, 
+          speed: 3 // স্পিড ২ গুণ বাড়ানো হয়েছে
+        }
       },
-      interactivity: { events: { onhover: { enable: true, mode: 'grab' } } },
+      interactivity: { 
+        events: { 
+          onhover: { enable: true, mode: 'grab' } 
+        } 
+      },
       retina_detect: true
     });
   </script>
