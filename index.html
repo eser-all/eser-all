@@ -487,18 +487,54 @@
       document.getElementById('emailStatus').style.display = 'none';
     }
 
-    function sendEmail(e) {
-      e.preventDefault();
-      const btn = document.getElementById('sendBtn');
-      const status = document.getElementById('emailStatus');
-      btn.disabled = true;
-      btn.innerText = "Sending...";
+    // Email Modal Controls
+    function openEmailModal() {
+      document.getElementById("emailModal").style.display = "flex";
+      document.getElementById("emailStatus").style.display = "none";
+      document.getElementById("emailForm").reset();
+    }
 
-      const params = {
-        from_email: document.getElementById('senderEmail').value,
-        subject: document.getElementById('emailSubject').value,
-        message: document.getElementById('emailMessage').value
+    function closeEmailModal() {
+      document.getElementById("emailModal").style.display = "none";
+    }
+
+    // EmailJS Send Function
+    function sendEmail(event) {
+      event.preventDefault();
+
+      const btn = document.getElementById("sendBtn");
+      const status = document.getElementById("emailStatus");
+      
+      const senderEmail = document.getElementById("senderEmail").value;
+      const subject = document.getElementById("emailSubject").value;
+      const message = document.getElementById("emailMessage").value;
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
+
+      const templateParams = {
+        from_email: senderEmail,
+        subject: subject,
+        message: message
       };
+     emailjs.send("service_oyptt6l", "template_qvj0msk", templateParams)
+        .then(function(response) {
+          status.style.color = "#4CAF50";
+          status.innerText = "Email sent successfully!";
+          status.style.display = "block";
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fas fa-paper-plane"></i> Send Mail`;
+          setTimeout(() => {
+            closeEmailModal();
+          }, 2000);
+        }, function(error) {
+          console.error("EmailJS Error:", error);
+          status.style.color = "#f44336";
+          status.innerText = "Failed: " + (error.text || "Check EmailJS Config");
+          status.style.display = "block";
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fas fa-paper-plane"></i> Send Mail`;
+        });
 
       emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', params)
         .then(() => {
