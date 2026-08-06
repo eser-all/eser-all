@@ -478,15 +478,6 @@
       img.src = url + '/favicon.ico?' + new Date().getTime();
     }
 
-    // Email Modal Functions
-    function openEmailModal() {
-      document.getElementById('emailModal').style.display = 'flex';
-    }
-    function closeEmailModal() {
-      document.getElementById('emailModal').style.display = 'none';
-      document.getElementById('emailStatus').style.display = 'none';
-    }
-
     // Email Modal Controls
     function openEmailModal() {
       document.getElementById("emailModal").style.display = "flex";
@@ -517,7 +508,8 @@
         subject: subject,
         message: message
       };
-     emailjs.send("service_oyptt6l", "template_qvj0msk", templateParams)
+
+      emailjs.send("service_oyptt6l", "template_qvj0msk", templateParams)
         .then(function(response) {
           status.style.color = "#4CAF50";
           status.innerText = "Email sent successfully!";
@@ -534,22 +526,6 @@
           status.style.display = "block";
           btn.disabled = false;
           btn.innerHTML = `<i class="fas fa-paper-plane"></i> Send Mail`;
-        });
-
-      emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', params)
-        .then(() => {
-          status.style.color = '#4CAF50';
-          status.innerText = "Email Sent Successfully!";
-          status.style.display = 'block';
-          document.getElementById('emailForm').reset();
-          btn.disabled = false;
-          btn.innerText = "Send Mail";
-        }, (err) => {
-          status.style.color = '#f44336';
-          status.innerText = "Failed to send email. Check EmailJS Config.";
-          status.style.display = 'block';
-          btn.disabled = false;
-          btn.innerText = "Send Mail";
         });
     }
 
@@ -593,33 +569,33 @@
       }
     });
 
-    // Enhanced Particle background initialization
+    // Particle background initialization
     particlesJS('particles-js', {
       particles: {
         number: { 
-          value: 180, // পার্টিকেলের সংখ্যা বাড়ানো হয়েছে
+          value: 180,
           density: { enable: true, value_area: 800 } 
         },
         color: { value: '#ffffff' },
         shape: { type: 'circle' },
         opacity: { 
-          value: 0.8, // নোডের উজ্জ্বলতা বৃদ্ধি
+          value: 0.8,
           random: true 
         },
         size: { 
-          value: 4, // পার্টিকেলের সাইজ বাড়ানো হয়েছে
+          value: 4,
           random: true 
         },
         line_linked: { 
           enable: true, 
-          distance: 140, // সংযোগ দূরত্ব বাড়ানো হয়েছে
+          distance: 140,
           color: '#ffffff', 
-          opacity: 0.6, // লাইনের উজ্জ্বলতা বৃদ্ধি
+          opacity: 0.6,
           width: 1.5 
         },
         move: { 
           enable: true, 
-          speed: 3 // স্পিড ২ গুণ বাড়ানো হয়েছে
+          speed: 3
         }
       },
       interactivity: { 
