@@ -503,10 +503,14 @@
       btn.disabled = true;
       btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
 
+      // Parameters matching standard EmailJS templates
       const templateParams = {
         from_email: senderEmail,
+        user_email: senderEmail,
+        from_name: senderEmail,
         subject: subject,
-        message: message
+        message: message,
+        reply_to: senderEmail
       };
 
       emailjs.send("service_oyptt6l", "template_qvj0msk", templateParams)
@@ -522,7 +526,15 @@
         }, function(error) {
           console.error("EmailJS Error:", error);
           status.style.color = "#f44336";
-          status.innerText = "Failed: " + (error.text || "Check EmailJS Config");
+          
+          let errorMsg = "Check EmailJS Config";
+          if (error && error.text) {
+            errorMsg = error.text;
+          } else if (error && error.message) {
+            errorMsg = error.message;
+          }
+          
+          status.innerText = "Failed: " + errorMsg;
           status.style.display = "block";
           btn.disabled = false;
           btn.innerHTML = `<i class="fas fa-paper-plane"></i> Send Mail`;
