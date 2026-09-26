@@ -18,9 +18,9 @@
 
   <style>
     :root {
-      --bg-color: #0e1621; /* Telegram Dark Background */
+      --bg-color: #0e1621; /* Web Telegram Dark Background */
       --text-color: #f5f5f5;
-      --card-bg: rgba(23, 33, 43, 0.85); /* Telegram Card Style */
+      --card-bg: rgba(23, 33, 43, 0.85);
       --card-border: rgba(255, 255, 255, 0.08);
       --card-hover: rgba(30, 42, 56, 0.95);
       --modal-bg: #17212b;
@@ -28,12 +28,12 @@
       --input-bg: #182533;
       --input-border: #2f3b4c;
       --footer-bg: rgba(14, 22, 33, 0.85);
-      --icon-color: #52b788; /* Telegram Accent Green / Blue vibe */
-      --bg-overlay: rgba(14, 22, 33, 0.8);
+      --icon-color: #52b788;
+      --bg-overlay: rgba(14, 22, 33, 0.82);
     }
 
     [data-theme="light"] {
-      --bg-color: #f0f2f5; /* Telegram Light Background */
+      --bg-color: #f0f2f5; /* Web Telegram Light Background */
       --text-color: #222222;
       --card-bg: rgba(255, 255, 255, 0.95);
       --card-border: rgba(0, 0, 0, 0.06);
@@ -222,7 +222,7 @@
     .logout-btn { 
       position: fixed; left: 20px; bottom: 20px; padding: 10px 18px; border-radius: 20px; 
       border: none; background: #e53935; color: white; font-size: 14px; font-weight: bold; 
-      cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(229, 57, 53, 0.3); 
+      cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(225, 29, 72, 0.3); 
     }
     
     .developer-footer { 
@@ -244,7 +244,7 @@
 
   <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
     <i class="fas fa-moon" id="themeIcon"></i>
-    <span id="themeText">Telegram Dark</span>
+    <span id="themeText">TG Dark</span>
   </button>
 
   <!-- Login Modal -->
@@ -292,7 +292,7 @@
     <div class="section-title"><i class="fas fa-passport"></i> পাসপোর্ট ও ভিসা (Passport & Visa)</div>
     <div class="link-container" id="passport-section"></div>
 
-    <div class="section-title"><i class="fas fa-file-invoice-dollar"></i> ট্যাক্স, লাইসেন্স ও পুলিশ সেবা (Tax & Police Services)</div>
+    <div class="section-title"><i class="fas fa-file-invoice-dollar"></i> ট্যাক্স, লাইসেন্স ও পুলিশ সেবা (Tax, License & Police)</div>
     <div class="link-container" id="tax-police-section"></div>
 
     <div class="section-title"><i class="fas fa-graduation-cap"></i> শিক্ষা, ভর্তি ও ফলাফল (Education & Admission)</div>
@@ -324,7 +324,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
   <script>
-    // Theme setup (Telegram Style)
+    // Theme setup (Web Telegram Style)
     function initTheme() {
       const theme = localStorage.getItem("theme") || "dark";
       document.documentElement.setAttribute("data-theme", theme);
@@ -352,7 +352,7 @@
     }
     initTheme();
 
-    // Firebase Config
+    // Firebase Config (Preserved)
     const firebaseConfig = {
       apiKey: "AIzaSyDB4r_a5gPtKhlzM0qqmYHBb6HA_I2SmHQ",
       authDomain: "eser-all.firebaseapp.com",
@@ -365,18 +365,18 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // ONLINE SHOP / COMPUTER SHOP USEFUL BANGLADESH SERVICE LINKS
+    // BANGLADESH ALL ONLINE APPLICATION & SERVICE LINKS FOR COMPUTER SHOPS
     let nidLinks = [
       { title: "NID পোর্টাল (ভোটার আবেদন)", url: "https://services.nidw.gov.bd/" },
       { title: "জন্ম ও মৃত্যু নিবন্ধন", url: "https://bdris.gov.bd/" },
-      { title: "ট্রেড লাইসেন্স সেবা", url: "https://treadlicense.gov.bd/" },
-      { title: "জমির খতিয়ান (E-Parcha)", url: "https://eparcha.gov.bd/" }
+      { title: "জমির খতিয়ান (E-Parcha)", url: "https://eparcha.gov.bd/" },
+      { title: "ট্রেড লাইসেন্স সেবা", url: "https://treadlicense.gov.bd/" }
     ];
 
     let passportLinks = [
       { title: "ই-পাসপোর্ট আবেদন", url: "https://www.epassport.gov.bd/" },
-      { title: "ভিসা যাচাই (Visa Check)", url: "https://evisa.gov.bd/" },
-      { title: "বায়োমেট্রিক ও রিক্রুটিং", url: "https://www.bmet.gov.bd/" }
+      { title: "ভিসা চেক (Visa Check)", url: "https://evisa.gov.bd/" },
+      { title: "প্রবাসী কল্যাণ (BMET)", url: "https://www.bmet.gov.bd/" }
     ];
 
     let taxPoliceLinks = [
@@ -388,21 +388,21 @@
 
     let eduLinks = [
       { title: "বোর্ড রেজাল্ট (SSC/HSC)", url: "https://www.educationboardresults.gov.bd/" },
-      { title: "একাদশ শ্রেণি ভর্তি (XI)", url: "https://www.xiclassadmission.gov.bd/" },
+      { title: "একাদশ শ্রেণি ভর্তি", url: "https://www.xiclassadmission.gov.bd/" },
       { title: "জাতীয় বিশ্ববিদ্যালয় (NU)", url: "http://www.nu.ac.bd/" },
       { title: "ঢাকা বিশ্ববিদ্যালয় ভর্তি", url: "https://admission.eis.du.ac.bd/" }
     ];
 
     let jobLinks = [
-      { title: "টেলিটক জব পোর্টাল (Teletalk)", url: "https://alljobs.teletalk.com.bd/" },
+      { title: "টেলিটক জব পোর্টাল", url: "https://alljobs.teletalk.com.bd/" },
       { title: "বিপিএসসি (BPSC Portal)", url: "http://bpsc.teletalk.com.bd/" },
       { title: "প্রাথমিক শিক্ষক নিয়োগ", url: "http://dpe.teletalk.com.bd/" }
     ];
 
     let ticketLinks = [
-      { title: "রেলওয়ে টিকিট (Bangladesh Railway)", url: "https://eticket.railway.gov.bd/" },
-      { title: "বাস টিকিট (Shohoz / Bus)", url: "https://www.shohoz.com/" },
-      { title: "বিমান টিকিট ও ট্যুরিজম", url: "https://gozayaan.com/" }
+      { title: "রেলওয়ে টিকিট (Railway)", url: "https://eticket.railway.gov.bd/" },
+      { title: "বাস টিকিট (Shohoz)", url: "https://www.shohoz.com/" },
+      { title: "বিমান টিকিট ও ট্যুর", url: "https://gozayaan.com/" }
     ];
 
     let ftpTvLinks = [
