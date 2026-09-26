@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <title>ESER-ALL Portal</title>
+  <title>ESER-ALL Portal - অনলাইন সেবা ও কম্পিউটার পোর্টাল</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   
@@ -18,45 +18,33 @@
 
   <style>
     :root {
-      --bg-color: #0f172a;
-      --text-color: #f8fafc;
-      --card-bg: rgba(255, 255, 255, 0.08);
-      --card-border: rgba(255, 255, 255, 0.15);
-      --card-hover: rgba(255, 255, 255, 0.2);
-      --modal-bg: #1e293b;
-      --modal-border: #334155;
-      --input-bg: #0f172a;
-      --input-border: #475569;
-      --footer-bg: rgba(15, 23, 42, 0.6);
-      --icon-color: #38bdf8;
-      --bg-overlay: rgba(15, 23, 42, 0.75);
+      --bg-color: #0e1621; /* Telegram Dark Background */
+      --text-color: #f5f5f5;
+      --card-bg: rgba(23, 33, 43, 0.85); /* Telegram Card Style */
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(30, 42, 56, 0.95);
+      --modal-bg: #17212b;
+      --modal-border: #242f3d;
+      --input-bg: #182533;
+      --input-border: #2f3b4c;
+      --footer-bg: rgba(14, 22, 33, 0.85);
+      --icon-color: #52b788; /* Telegram Accent Green / Blue vibe */
+      --bg-overlay: rgba(14, 22, 33, 0.8);
     }
 
     [data-theme="light"] {
-      --bg-color: #e0f2fe;
-      --text-color: #0c4a6e;
-      --card-bg: rgba(255, 255, 255, 0.85);
-      --card-border: rgba(56, 189, 248, 0.3);
+      --bg-color: #f0f2f5; /* Telegram Light Background */
+      --text-color: #222222;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --card-border: rgba(0, 0, 0, 0.06);
       --card-hover: #ffffff;
       --modal-bg: #ffffff;
-      --modal-border: #bae6fd;
-      --input-bg: #f0f9ff;
-      --input-border: #7dd3fc;
-      --footer-bg: rgba(224, 242, 254, 0.85);
-      --icon-color: #0284c7;
-      --bg-overlay: rgba(224, 242, 254, 0.45);
-      animation: gradientBG 15s ease infinite;
-    }
-
-    [data-theme="light"] body {
-      animation: skyColorShift 18s infinite alternate ease-in-out;
-    }
-
-    @keyframes skyColorShift {
-      0% { background-color: #e0f2fe; }
-      33% { background-color: #bae6fd; }
-      66% { background-color: #e0f7fa; }
-      100% { background-color: #f0f9ff; }
+      --modal-border: #e4e6eb;
+      --input-bg: #f5f6f8;
+      --input-border: #ccd0d5;
+      --footer-bg: rgba(240, 242, 245, 0.9);
+      --icon-color: #2481cc; /* Telegram Classic Blue */
+      --bg-overlay: rgba(240, 242, 245, 0.5);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -67,7 +55,7 @@
       background: var(--bg-color);
       color: var(--text-color);
       display: flex; flex-direction: column; justify-content: space-between;
-      transition: background 0.5s ease, color 0.5s ease;
+      transition: background 0.4s ease, color 0.4s ease;
       position: relative;
     }
 
@@ -78,12 +66,12 @@
 
     .bg-video-container video {
       width: 100%; height: 100%; object-fit: cover;
-      filter: brightness(0.85) contrast(1.05);
+      filter: brightness(0.8) contrast(1.02);
     }
 
     .bg-overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: var(--bg-overlay); transition: background 0.5s ease;
+      background: var(--bg-overlay); transition: background 0.4s ease;
     }
     
     .theme-toggle-btn {
@@ -91,14 +79,14 @@
       background: var(--card-bg); border: 1px solid var(--card-border);
       color: var(--text-color); padding: 10px 16px; border-radius: 50px;
       cursor: pointer; display: flex; align-items: center; gap: 8px;
-      font-weight: bold; backdrop-filter: blur(8px);
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2); transition: all 0.3s ease;
+      font-weight: bold; backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); transition: all 0.3s ease;
     }
     .theme-toggle-btn:hover { background: var(--card-hover); transform: scale(1.03); }
 
     .dashboard { position: relative; z-index: 1; padding: 30px 15px 10px; text-align: center; }
     .main-header { font-size: 32px; font-weight: 800; margin-bottom: 25px; margin-top: 10px; letter-spacing: 0.5px; }
-    .section-title { font-size: 22px; margin: 25px 0 15px; display: flex; justify-content: center; align-items: center; gap: 10px; color: var(--text-color); }
+    .section-title { font-size: 20px; margin: 25px 0 15px; display: flex; justify-content: center; align-items: center; gap: 10px; color: var(--text-color); font-weight: 700; }
     .section-title i { color: var(--icon-color); }
 
     .link-container { 
@@ -107,7 +95,7 @@
       align-items: center; 
       flex-wrap: wrap; 
       gap: 12px; 
-      max-width: 1000px; 
+      max-width: 1100px; 
       margin: 0 auto 20px auto; 
     }
     
@@ -121,10 +109,10 @@
       border: 1px solid var(--card-border);
       border-radius: 14px; 
       color: var(--text-color); 
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       font-size: 13px; 
       font-weight: 600; 
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       position: relative; 
       width: 160px; 
       height: 110px; 
@@ -134,7 +122,7 @@
     }
 
     .link-card i.main-icon { 
-      font-size: 28px; 
+      font-size: 26px; 
       margin-bottom: 8px; 
       color: var(--icon-color); 
       transition: transform 0.2s ease; 
@@ -155,7 +143,8 @@
     .link-card:hover { 
       transform: translateY(-4px); 
       background: var(--card-hover); 
-      box-shadow: 0 12px 20px rgba(2, 132, 199, 0.2); 
+      box-shadow: 0 8px 20px rgba(36, 129, 204, 0.25); 
+      border-color: var(--icon-color);
     }
     
     .link-card:hover i.main-icon { 
@@ -178,17 +167,17 @@
     .status-badge.offline { background: rgba(244, 67, 54, 0.25); color: #f44336; border: 1px solid #f44336; }
     .status-badge.checking { background: rgba(255, 193, 7, 0.25); color: #ffc107; border: 1px solid #ffc107; }
 
-    /* Modals (Login & Email) */
+    /* Modals */
     .user-login-modal, .email-modal { 
       position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px);
       display: flex; justify-content: center; align-items: center; z-index: 1002; 
     }
     
     .modal-content { 
       background: var(--modal-bg); color: var(--text-color); padding: 28px; 
       border-radius: 16px; width: 340px; border: 1px solid var(--modal-border); 
-      text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4); 
+      text-align: center; box-shadow: 0 20px 30px rgba(0, 0, 0, 0.5); 
       position: relative;
     }
     
@@ -198,17 +187,14 @@
       font-family: inherit; font-size: 13px;
     }
     
-    .modal-content textarea {
-      resize: vertical; min-height: 90px;
-    }
+    .modal-content textarea { resize: vertical; min-height: 90px; }
 
     .modal-content button { 
       padding: 12px; margin-top: 5px; cursor: pointer; border: none; 
-      border-radius: 8px; font-weight: bold; background: #0284c7; color: white; width: 100%; 
+      border-radius: 8px; font-weight: bold; background: #2481cc; color: white; width: 100%; 
       transition: background 0.2s ease;
     }
-
-    .modal-content button:hover { background: #0369a1; }
+    .modal-content button:hover { background: #1a6fb0; }
 
     .close-btn {
       position: absolute; top: 12px; right: 15px; font-size: 18px; 
@@ -216,10 +202,9 @@
     }
     .close-btn:hover { opacity: 1; }
 
-    /* Divider & Google Login Style */
     .divider {
       display: flex; align-items: center; text-align: center;
-      margin: 15px 0; color: #94a3b8; font-size: 12px;
+      margin: 15px 0; color: #888888; font-size: 12px;
     }
     .divider::before, .divider::after {
       content: ''; flex: 1; border-bottom: 1px solid var(--modal-border);
@@ -236,8 +221,8 @@
 
     .logout-btn { 
       position: fixed; left: 20px; bottom: 20px; padding: 10px 18px; border-radius: 20px; 
-      border: none; background: #e11d48; color: white; font-size: 14px; font-weight: bold; 
-      cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(225, 29, 72, 0.3); 
+      border: none; background: #e53935; color: white; font-size: 14px; font-weight: bold; 
+      cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(229, 57, 53, 0.3); 
     }
     
     .developer-footer { 
@@ -259,7 +244,7 @@
 
   <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
     <i class="fas fa-moon" id="themeIcon"></i>
-    <span id="themeText">Dark Sky</span>
+    <span id="themeText">Telegram Dark</span>
   </button>
 
   <!-- Login Modal -->
@@ -272,7 +257,6 @@
       
       <div class="divider">OR</div>
       
-      <!-- Google Login Button -->
       <button class="google-btn" onclick="checkGoogleLogin()">
         <i class="fab fa-google" style="color: #ea4335; font-size: 16px;"></i> Sign in with Google
       </button>
@@ -302,20 +286,26 @@
   <div class="dashboard" id="mainDashboard" style="display: none;">
     <div class="main-header">ESER-ALL Portal</div>
 
-    <div class="section-title"><i class="fas fa-server"></i> FTP Servers</div>
-    <div class="link-container" id="ftp-all-section"></div>
+    <div class="section-title"><i class="fas fa-id-card"></i> জাতীয় পরিচয়পত্র ও নাগরিক সেবা (NID & Civil Services)</div>
+    <div class="link-container" id="nid-section"></div>
 
-    <div class="section-title"><i class="fas fa-tv"></i> Live TV</div>
-    <div class="link-container" id="tv-all-section"></div>
+    <div class="section-title"><i class="fas fa-passport"></i> পাসপোর্ট ও ভিসা (Passport & Visa)</div>
+    <div class="link-container" id="passport-section"></div>
 
-    <div class="section-title"><i class="fas fa-landmark"></i> সরকারি সেবা (Government Services)</div>
-    <div class="link-container" id="gov-section"></div>
+    <div class="section-title"><i class="fas fa-file-invoice-dollar"></i> ট্যাক্স, লাইসেন্স ও পুলিশ সেবা (Tax & Police Services)</div>
+    <div class="link-container" id="tax-police-section"></div>
 
-    <div class="section-title"><i class="fas fa-graduation-cap"></i> শিক্ষা ও ভর্তি (Education & Admissions)</div>
+    <div class="section-title"><i class="fas fa-graduation-cap"></i> শিক্ষা, ভর্তি ও ফলাফল (Education & Admission)</div>
     <div class="link-container" id="edu-section"></div>
 
-    <div class="section-title"><i class="fas fa-ticket-alt"></i> Online Ticket</div>
+    <div class="section-title"><i class="fas fa-briefcase"></i> চাকরি ও সরকারি সার্কুলার (Jobs & Career)</div>
+    <div class="link-container" id="job-section"></div>
+
+    <div class="section-title"><i class="fas fa-ticket-alt"></i> অনলাইন টিকিট ও ভ্রমণ (Ticket & Travel)</div>
     <div class="link-container" id="ticket-section"></div>
+
+    <div class="section-title"><i class="fas fa-server"></i> লোকাল এফটিপি ও লাইভ টিভি (FTP & Live TV)</div>
+    <div class="link-container" id="ftp-tv-section"></div>
 
     <div class="section-title"><i class="fas fa-envelope"></i> যোগাযোগ (Contact Us)</div>
     <div class="link-container" id="contact-section"></div>
@@ -334,7 +324,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
   <script>
-    // Theme setup
+    // Theme setup (Telegram Style)
     function initTheme() {
       const theme = localStorage.getItem("theme") || "dark";
       document.documentElement.setAttribute("data-theme", theme);
@@ -354,10 +344,10 @@
       const text = document.getElementById("themeText");
       if (theme === "light") {
         icon.className = "fas fa-sun";
-        text.innerText = "Sky Light";
+        text.innerText = "TG Light";
       } else {
         icon.className = "fas fa-moon";
-        text.innerText = "Night Sky";
+        text.innerText = "TG Dark";
       }
     }
     initTheme();
@@ -375,39 +365,51 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // LINK ARRAYS
-    let ftpLinks = [
-      { id: "ftp1", title: "Sam FTP", url: "http://172.16.50.4/" },
-      { id: "ftp2", title: "Crazy HD", url: "http://crazyhd.com/" },
-      { id: "ftp3", title: "Ctg Movies", url: "https://ctgmovies.com/" },
-      { id: "ftp4", title: "Ghuri FTP", url: "http://103.96.104.6//" },
-      { id: "ftp5", title: "ICC FTP", url: "http://10.16.100.244/dashboard.php?session=c2c3e6c0aa01b1c155cec1fbab1bc6c47883390af1b4cb470ee461ff53665061/" }
+    // ONLINE SHOP / COMPUTER SHOP USEFUL BANGLADESH SERVICE LINKS
+    let nidLinks = [
+      { title: "NID পোর্টাল (ভোটার আবেদন)", url: "https://services.nidw.gov.bd/" },
+      { title: "জন্ম ও মৃত্যু নিবন্ধন", url: "https://bdris.gov.bd/" },
+      { title: "ট্রেড লাইসেন্স সেবা", url: "https://treadlicense.gov.bd/" },
+      { title: "জমির খতিয়ান (E-Parcha)", url: "https://eparcha.gov.bd/" }
     ];
 
-    let tvLinks = [
-      { id: "tv1", title: "Toffee Live", url: "https://toffeelive.com/" },
-      { id: "tv2", title: "Bongo BD", url: "https://bongobd.com/" },
-      { id: "tv3", title: "T Sports", url: "https://www.tsports.com/" },
-      { id: "tv4", title: "IP TV", url: "http://172.28.28.54/" }
+    let passportLinks = [
+      { title: "ই-পাসপোর্ট আবেদন", url: "https://www.epassport.gov.bd/" },
+      { title: "ভিসা যাচাই (Visa Check)", url: "https://evisa.gov.bd/" },
+      { title: "বায়োমেট্রিক ও রিক্রুটিং", url: "https://www.bmet.gov.bd/" }
     ];
 
-    let govLinks = [
-      { title: "NID / ভোটার আবেদন", url: "http://services.nidw.gov.bd" },
-      { title: "জন্ম নিবন্ধন ও সংশোধন", url: "http://bdris.gov.bd" },
-      { title: "পাসপোর্টের আবেদন", url: "http://epassport.gov.bd" },
-      { title: "টিন (e-TIN) সার্টিফিকেট", url: "http://incometax.gov.bd" },
-      { title: "পুলিশ ক্লিয়ারেন্স আবেদন", url: "http://pcc.police.gov.bd" }
+    let taxPoliceLinks = [
+      { title: "অনলাইন টিন (e-TIN)", url: "https://secure.incometax.gov.bd/" },
+      { title: "ভ্যাট রিটার্ন (NBR)", url: "https://vat.gov.bd/" },
+      { title: "পুলিশ ক্লিয়ারেন্স", url: "https://pcc.police.gov.bd/" },
+      { title: "অনলাইন জিডি (GD)", url: "https://gd.police.gov.bd/" }
     ];
 
     let eduLinks = [
-      { title: "JSC/JDC/SSC/DAKHIL/HSC/ALIM", url: "https://www.educationboardresults.gov.bd/v2/home" },
-      { title: "ঢাকা বিশ্ববিদ্যালয়", url: "http://duadmission.eis.du.ac.bd" },
-      { title: "জাতীয় বিশ্ববিদ্যালয় ফলাফল", url: "http://results.nu.ac.bd/" }
+      { title: "বোর্ড রেজাল্ট (SSC/HSC)", url: "https://www.educationboardresults.gov.bd/" },
+      { title: "একাদশ শ্রেণি ভর্তি (XI)", url: "https://www.xiclassadmission.gov.bd/" },
+      { title: "জাতীয় বিশ্ববিদ্যালয় (NU)", url: "http://www.nu.ac.bd/" },
+      { title: "ঢাকা বিশ্ববিদ্যালয় ভর্তি", url: "https://admission.eis.du.ac.bd/" }
+    ];
+
+    let jobLinks = [
+      { title: "টেলিটক জব পোর্টাল (Teletalk)", url: "https://alljobs.teletalk.com.bd/" },
+      { title: "বিপিএসসি (BPSC Portal)", url: "http://bpsc.teletalk.com.bd/" },
+      { title: "প্রাথমিক শিক্ষক নিয়োগ", url: "http://dpe.teletalk.com.bd/" }
     ];
 
     let ticketLinks = [
-      { title: "Railway Ticket", url: "https://eticket.railway.gov.bd/" },
-      { title: "Biman Ticket", url: "https://gozayaan.com/" }
+      { title: "রেলওয়ে টিকিট (Bangladesh Railway)", url: "https://eticket.railway.gov.bd/" },
+      { title: "বাস টিকিট (Shohoz / Bus)", url: "https://www.shohoz.com/" },
+      { title: "বিমান টিকিট ও ট্যুরিজম", url: "https://gozayaan.com/" }
+    ];
+
+    let ftpTvLinks = [
+      { id: "ftp1", title: "Sam FTP Server", url: "http://172.16.50.4/" },
+      { id: "ftp2", title: "Crazy HD Movies", url: "http://crazyhd.com/" },
+      { id: "tv1", title: "Toffee Live TV", url: "https://toffeelive.com/" },
+      { id: "tv3", title: "T Sports Live", url: "https://www.tsports.com/" }
     ];
 
     let contactLinks = [
@@ -431,7 +433,7 @@
           err.style.display = "none";
           showDashboard();
         })
-        .catch((error) => {
+        .catch(() => {
           err.innerText = "Invalid Login Credentials!";
           err.style.display = "block";
         });
@@ -477,40 +479,48 @@
     }
 
     function renderLinks() {
-      const ftpSec = document.getElementById("ftp-all-section");
-      const tvSec = document.getElementById("tv-all-section");
-      const govSec = document.getElementById("gov-section");
+      const nidSec = document.getElementById("nid-section");
+      const passportSec = document.getElementById("passport-section");
+      const taxPoliceSec = document.getElementById("tax-police-section");
       const eduSec = document.getElementById("edu-section");
+      const jobSec = document.getElementById("job-section");
       const ticketSec = document.getElementById("ticket-section");
+      const ftpTvSec = document.getElementById("ftp-tv-section");
       const contactSec = document.getElementById("contact-section");
 
-      if(ftpSec) ftpSec.innerHTML = "";
-      if(tvSec) tvSec.innerHTML = "";
-      if(govSec) govSec.innerHTML = "";
+      if(nidSec) nidSec.innerHTML = "";
+      if(passportSec) passportSec.innerHTML = "";
+      if(taxPoliceSec) taxPoliceSec.innerHTML = "";
       if(eduSec) eduSec.innerHTML = "";
+      if(jobSec) jobSec.innerHTML = "";
       if(ticketSec) ticketSec.innerHTML = "";
+      if(ftpTvSec) ftpTvSec.innerHTML = "";
       if(contactSec) contactSec.innerHTML = "";
 
-      ftpLinks.forEach(item => { if(ftpSec) ftpSec.innerHTML += genCard(item.title, item.url, "ftp", item.id); });
-      tvLinks.forEach(item => { if(tvSec) tvSec.innerHTML += genCard(item.title, item.url, "tv", item.id); });
-      govLinks.forEach(item => { if(govSec) govSec.innerHTML += genCard(item.title, item.url, "gov"); });
+      nidLinks.forEach(item => { if(nidSec) nidSec.innerHTML += genCard(item.title, item.url, "nid"); });
+      passportLinks.forEach(item => { if(passportSec) passportSec.innerHTML += genCard(item.title, item.url, "passport"); });
+      taxPoliceLinks.forEach(item => { if(taxPoliceSec) taxPoliceSec.innerHTML += genCard(item.title, item.url, "tax"); });
       eduLinks.forEach(item => { if(eduSec) eduSec.innerHTML += genCard(item.title, item.url, "edu"); });
+      jobLinks.forEach(item => { if(jobSec) jobSec.innerHTML += genCard(item.title, item.url, "job"); });
       ticketLinks.forEach(item => { if(ticketSec) ticketSec.innerHTML += genCard(item.title, item.url, "ticket"); });
+      ftpTvLinks.forEach(item => { if(ftpTvSec) ftpTvSec.innerHTML += genCard(item.title, item.url, "ftp", item.id); });
       contactLinks.forEach(item => { if(contactSec) contactSec.innerHTML += genCard(item.title, item.action, "contact", null, item.type); });
     }
 
     function genCard(title, target, category, id = null, type = "url") {
       let iconClass = "fas fa-globe";
       
-      if (category === "ftp") iconClass = "fas fa-server";
-      if (category === "tv") iconClass = "fas fa-tv";
-      if (category === "gov") iconClass = "fas fa-landmark";
+      if (category === "nid") iconClass = "fas fa-id-card";
+      if (category === "passport") iconClass = "fas fa-passport";
+      if (category === "tax") iconClass = "fas fa-file-invoice-dollar";
       if (category === "edu") iconClass = "fas fa-graduation-cap";
+      if (category === "job") iconClass = "fas fa-briefcase";
       if (category === "ticket") {
         if (title.toLowerCase().includes("railway")) iconClass = "fas fa-train";
-        else if (title.toLowerCase().includes("biman")) iconClass = "fas fa-plane";
-        else iconClass = "fas fa-ticket-alt";
+        else if (title.toLowerCase().includes("bus")) iconClass = "fas fa-bus";
+        else iconClass = "fas fa-plane";
       }
+      if (category === "ftp") iconClass = "fas fa-server";
       if (category === "contact") iconClass = "fas fa-paper-plane";
 
       let badgeHTML = "";
@@ -532,7 +542,6 @@
       `;
     }
 
-    // Ping Checker
     function checkNetworkStatus(url, elementId) {
       const badge = document.getElementById(`status-${elementId}`);
       if (!badge) return;
@@ -554,11 +563,11 @@
     }
 
     function checkAllNetworkStatuses() {
-      ftpLinks.forEach(item => checkNetworkStatus(item.url, item.id));
-      tvLinks.forEach(item => checkNetworkStatus(item.url, item.id));
+      ftpTvLinks.forEach(item => {
+        if(item.id) checkNetworkStatus(item.url, item.id);
+      });
     }
 
-    // Email Modal Controls
     function openEmailModal() {
       document.getElementById("emailModal").style.display = "flex";
       document.getElementById("emailStatus").style.display = "none";
@@ -569,7 +578,6 @@
       document.getElementById("emailModal").style.display = "none";
     }
 
-    // EmailJS Send Function
     function sendEmail(event) {
       event.preventDefault();
 
@@ -588,20 +596,18 @@
         subject: subject,
         message: message
       };
-     emailjs.send("service_oyptt6l", "template_qvj0msk", templateParams)
+      
+      emailjs.send("service_oyptt6l", "template_qvj0msk", templateParams)
         .then(function(response) {
           status.style.color = "#4CAF50";
           status.innerText = "Email sent successfully!";
           status.style.display = "block";
           btn.disabled = false;
           btn.innerHTML = `<i class="fas fa-paper-plane"></i> Send Mail`;
-          setTimeout(() => {
-            closeEmailModal();
-          }, 2000);
+          setTimeout(() => { closeEmailModal(); }, 2000);
         }, function(error) {
-          console.error("EmailJS Error:", error);
           status.style.color = "#f44336";
-          status.innerText = "Failed: " + (error.text || "Check EmailJS Config");
+          status.innerText = "Failed to send email!";
           status.style.display = "block";
           btn.disabled = false;
           btn.innerHTML = `<i class="fas fa-paper-plane"></i> Send Mail`;
