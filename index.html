@@ -20,31 +20,29 @@
     :root {
       --bg-color: #0e1621; /* Web Telegram Dark Background */
       --text-color: #f5f5f5;
-      --card-bg: rgba(23, 33, 43, 0.85);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-hover: rgba(30, 42, 56, 0.95);
+      --card-bg: #17212b; /* Telegram Chat/Card Color */
+      --card-border: rgba(255, 255, 255, 0.06);
+      --card-hover: #1e2c3a;
       --modal-bg: #17212b;
       --modal-border: #242f3d;
       --input-bg: #182533;
       --input-border: #2f3b4c;
-      --footer-bg: rgba(14, 22, 33, 0.85);
-      --icon-color: #52b788;
-      --bg-overlay: rgba(14, 22, 33, 0.82);
+      --footer-bg: #0e1621;
+      --icon-color: #52b788; /* Telegram Accent */
     }
 
     [data-theme="light"] {
       --bg-color: #f0f2f5; /* Web Telegram Light Background */
       --text-color: #222222;
-      --card-bg: rgba(255, 255, 255, 0.95);
+      --card-bg: #ffffff;
       --card-border: rgba(0, 0, 0, 0.06);
-      --card-hover: #ffffff;
+      --card-hover: #f8f9fa;
       --modal-bg: #ffffff;
       --modal-border: #e4e6eb;
       --input-bg: #f5f6f8;
       --input-border: #ccd0d5;
-      --footer-bg: rgba(240, 242, 245, 0.9);
+      --footer-bg: #f0f2f5;
       --icon-color: #2481cc; /* Telegram Classic Blue */
-      --bg-overlay: rgba(240, 242, 245, 0.5);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -52,26 +50,11 @@
     
     body {
       margin: 0; padding: 0;
-      background: var(--bg-color);
+      background-color: var(--bg-color);
       color: var(--text-color);
       display: flex; flex-direction: column; justify-content: space-between;
-      transition: background 0.4s ease, color 0.4s ease;
+      transition: background-color 0.3s ease, color 0.3s ease;
       position: relative;
-    }
-
-    .bg-video-container {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      overflow: hidden; z-index: 0;
-    }
-
-    .bg-video-container video {
-      width: 100%; height: 100%; object-fit: cover;
-      filter: brightness(0.8) contrast(1.02);
-    }
-
-    .bg-overlay {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: var(--bg-overlay); transition: background 0.4s ease;
     }
     
     .theme-toggle-btn {
@@ -79,7 +62,7 @@
       background: var(--card-bg); border: 1px solid var(--card-border);
       color: var(--text-color); padding: 10px 16px; border-radius: 50px;
       cursor: pointer; display: flex; align-items: center; gap: 8px;
-      font-weight: bold; backdrop-filter: blur(10px);
+      font-weight: bold;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); transition: all 0.3s ease;
     }
     .theme-toggle-btn:hover { background: var(--card-hover); transform: scale(1.03); }
@@ -107,17 +90,16 @@
       padding: 12px 10px; 
       background: var(--card-bg); 
       border: 1px solid var(--card-border);
-      border-radius: 14px; 
+      border-radius: 12px; 
       color: var(--text-color); 
-      backdrop-filter: blur(12px);
       font-size: 13px; 
       font-weight: 600; 
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       position: relative; 
       width: 160px; 
       height: 110px; 
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       text-align: center;
     }
 
@@ -141,9 +123,9 @@
     }
 
     .link-card:hover { 
-      transform: translateY(-4px); 
+      transform: translateY(-3px); 
       background: var(--card-hover); 
-      box-shadow: 0 8px 20px rgba(36, 129, 204, 0.25); 
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); 
       border-color: var(--icon-color);
     }
     
@@ -163,21 +145,21 @@
       align-items: center; 
       gap: 3px;
     }
-    .status-badge.online { background: rgba(76, 175, 80, 0.25); color: #4CAF50; border: 1px solid #4CAF50; }
-    .status-badge.offline { background: rgba(244, 67, 54, 0.25); color: #f44336; border: 1px solid #f44336; }
-    .status-badge.checking { background: rgba(255, 193, 7, 0.25); color: #ffc107; border: 1px solid #ffc107; }
+    .status-badge.online { background: rgba(76, 175, 80, 0.2); color: #4CAF50; border: 1px solid #4CAF50; }
+    .status-badge.offline { background: rgba(244, 67, 54, 0.2); color: #f44336; border: 1px solid #f44336; }
+    .status-badge.checking { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid #ffc107; }
 
     /* Modals */
     .user-login-modal, .email-modal { 
       position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-      background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px);
       display: flex; justify-content: center; align-items: center; z-index: 1002; 
     }
     
     .modal-content { 
       background: var(--modal-bg); color: var(--text-color); padding: 28px; 
       border-radius: 16px; width: 340px; border: 1px solid var(--modal-border); 
-      text-align: center; box-shadow: 0 20px 30px rgba(0, 0, 0, 0.5); 
+      text-align: center; box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4); 
       position: relative;
     }
     
@@ -202,32 +184,15 @@
     }
     .close-btn:hover { opacity: 1; }
 
-    .divider {
-      display: flex; align-items: center; text-align: center;
-      margin: 15px 0; color: #888888; font-size: 12px;
-    }
-    .divider::before, .divider::after {
-      content: ''; flex: 1; border-bottom: 1px solid var(--modal-border);
-    }
-    .divider:not(:empty)::before { margin-right: .5em; }
-    .divider:not(:empty)::after { margin-left: .5em; }
-
-    .google-btn {
-      background: #ffffff !important; color: #333333 !important;
-      display: flex; align-items: center; justify-content: center;
-      gap: 10px; border: 1px solid #cbd5e1 !important; transition: background 0.2s ease;
-    }
-    .google-btn:hover { background: #f1f5f9 !important; }
-
     .logout-btn { 
       position: fixed; left: 20px; bottom: 20px; padding: 10px 18px; border-radius: 20px; 
       border: none; background: #e53935; color: white; font-size: 14px; font-weight: bold; 
-      cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(225, 29, 72, 0.3); 
+      cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(229, 57, 53, 0.3); 
     }
     
     .developer-footer { 
       position: relative; z-index: 1; text-align: center; padding: 15px 10px; 
-      font-size: 14px; background: var(--footer-bg); margin-top: 30px; backdrop-filter: blur(8px); 
+      font-size: 14px; background: var(--footer-bg); margin-top: 30px; 
     }
     .developer-footer span { font-weight: bold; color: var(--icon-color); }
   </style>
@@ -235,32 +200,18 @@
 
 <body oncontextmenu="return false;">
 
-  <div class="bg-video-container">
-    <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1506744038136-46273834b3fb">
-      <source src="https://assets.mixkit.co/videos/preview/mixkit-timelapse-of-clouds-and-mountains-2408-large.mp4" type="video/mp4">
-    </video>
-    <div class="bg-overlay"></div>
-  </div>
-
   <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
     <i class="fas fa-moon" id="themeIcon"></i>
     <span id="themeText">TG Dark</span>
   </button>
 
-  <!-- Login Modal -->
+  <!-- Login Modal (Google Sign-In Removed) -->
   <div class="user-login-modal" id="userLoginModal">
     <div class="modal-content" id="loginBox">
       <h3 style="margin-bottom: 15px;"><i class="fas fa-shield-alt" style="color: var(--icon-color);"></i> Secure Login</h3>
       <input type="email" id="userInputEmail" placeholder="Email Address" autocomplete="off">
       <input type="password" id="userInputPass" placeholder="Password" autocomplete="off">
       <button onclick="checkUserLogin()">Login</button>
-      
-      <div class="divider">OR</div>
-      
-      <button class="google-btn" onclick="checkGoogleLogin()">
-        <i class="fab fa-google" style="color: #ea4335; font-size: 16px;"></i> Sign in with Google
-      </button>
-
       <div id="loginError" style="color: #f44336; font-size: 12px; margin-top: 10px; display: none;"></div>
     </div>
   </div>
@@ -352,7 +303,7 @@
     }
     initTheme();
 
-    // Firebase Config (Preserved)
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyDB4r_a5gPtKhlzM0qqmYHBb6HA_I2SmHQ",
       authDomain: "eser-all.firebaseapp.com",
@@ -435,21 +386,6 @@
         })
         .catch(() => {
           err.innerText = "Invalid Login Credentials!";
-          err.style.display = "block";
-        });
-    }
-
-    function checkGoogleLogin() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      const err = document.getElementById("loginError");
-
-      auth.signInWithPopup(provider)
-        .then(() => {
-          err.style.display = "none";
-          showDashboard();
-        })
-        .catch((error) => {
-          err.innerText = error.message || "Google Sign-In failed!";
           err.style.display = "block";
         });
     }
